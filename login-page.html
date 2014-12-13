@@ -1,0 +1,110 @@
+<!--
+Copyright (c) 2014 Long Xiang (seanlong@outlook.com). All rights reserved.
+Unauthorized copying of this file, via any medium is strictly prohibited
+Proprietary and confidential
+-->
+
+<link rel="import" href="./bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="./bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="./bower_components/paper-input/paper-input.html">
+<link rel="import" href="./bower_components/paper-button/paper-button.html">
+<link rel="import" href="./bower_components/paper-input/paper-input-decorator.html">
+
+<polymer-element name="user-login">
+    <template>
+        <style>
+        paper-radio-button {
+            height: 50px;
+            margin-top: 40px;
+        }
+        #account {
+            margin-left: 10px;
+            margin-bottom: 24px;
+        }
+        :host {
+            display: block;
+            width: 400px;
+            height: 400px;
+        }
+        paper-button {
+            margin-left: 10px;
+            width: 140px;
+            height: 45px;
+        }
+        paper-button[raised].colored {
+            background: #4caf50;
+            color: #fff;
+        }
+        </style>
+        <div vertical layout>
+            <paper-radio-group id="selector" selected={{selected}}>
+                <paper-radio-button label="普通用户登录"></paper-radio-button>
+                <paper-radio-button label="管理员登录"></paper-radio-button>
+            </paper-radio-group>
+            <div id="account" vertical layout>
+                <core-label>{{account_label}}
+                    <paper-input label=" 请输入登录帐号"></paper-input>
+                </core-label>
+                <core-label>{{passwd_label}}
+                    <paper-input label=" 请输入登录密码"></paper-input>
+                </core-label>
+            </div>
+            <paper-button raised class="colored" on-click="{{onClick}}">登 录</paper-button>
+        </div>
+    </template>
+    <script>
+    var user_account_str = '用户帐号:';
+    var user_passwd_str = '用户密码:';
+    var admin_account_str = '管理员帐号:';
+    var admin_passwd_str = '管理员密码:';
+    Polymer({
+        ready: function() {
+            this.selected = 0;
+            this.account_label = user_account_str;
+            this.passwd_label = user_passwd_str;
+        },
+        selectedChanged: function(oldSelected, newSelected) {
+            this.account_label = newSelected ? admin_account_str : user_account_str;
+            this.passwd_label = newSelected ? admin_passwd_str : user_passwd_str;
+        },
+        onClick: function() {
+            var type = this.selected ? "admin" : "user";
+            this.fire('login', {
+                type: type
+            });
+        },
+        publish: {
+            selected: 0,
+        }
+    });
+    </script>
+</polymer-element>
+
+<polymer-element name='login-page'>
+    <template>
+        <style>
+        :host,
+        core-header-panel {
+            height: 100%;
+        }
+        core-header-panel b {
+            font-size: 48px;
+        }
+        core-toolbar {
+            color: #fff;
+            background-color: #3f51b5
+        }
+        </style>
+        <core-header-panel flex>
+            <core-toolbar justify="center">
+                <div><b>油罐管理系统 </b> alpha</div>
+            </core-toolbar>
+            <div horizontal center-justified layout>
+                <user-login></user-login>
+            </div>
+        </core-header-panel>
+    </template>
+    <script>
+    Polymer({});
+    </script>
+</polymer-element>

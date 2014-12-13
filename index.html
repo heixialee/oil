@@ -1,0 +1,63 @@
+<!--
+Copyright (c) 2014 Long Xiang (seanlong@outlook.com). All rights reserved.
+Unauthorized copying of this file, via any medium is strictly prohibited
+Proprietary and confidential
+-->
+
+<head>
+    <meta http-equiv=Content-Type content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <script src="./bower_components/webcomponentsjs/webcomponents.js"></script>
+    <link rel="import" href="./bower_components/core-scaffold/core-scaffold.html">
+    <link rel="import" href="./bower_components/paper-radio-group/paper-radio-group.html">
+    <link rel="import" href="./bower_components/paper-radio-button/paper-radio-button.html">
+    <link rel="import" href="./bower_components/paper-input/paper-input.html">
+    <link rel="import" href="./bower_components/paper-button/paper-button.html">
+    <link rel="import" href="./bower_components/paper-input/paper-input-decorator.html">
+    <link rel="import" href="./bower_components/core-pages/core-pages.html">
+
+    <link href="login-page.html" rel="import">
+    <link href="user-page.html" rel="import">
+    <link href="admin-page.html" rel="import">
+    <style>
+    body {
+        font-family: arial, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', '宋体', \5b8b\4f53, Tahoma, Arial, Helvetica, STHeiti;
+    }
+    </style>
+</head>
+
+<body fullbleed layout vertical unresolved>
+    <polymer-element name='home-page'>
+        <template>
+            <style>
+            :host,
+            core-pages {
+                display: block;
+                height: 100%;
+            }
+            </style>
+            <core-pages selected="{{selected}}" flex>
+                <login-page id="login_pg"></login-page>
+                <user-page id="user_pg"></user-page>
+                <admin-page id="admin_pg"></admin-page>
+            </core-pages>
+        </template>
+        <script>
+        Polymer({
+            ready: function() {
+                this.selected = 0;
+                var that = this;
+                this.$.login_pg.addEventListener('login', function(e) {
+                    if (e.detail.type == 'user')
+                        that.selected = 1;
+                    else if (e.detail.type == 'admin')
+                        that.selected = 2;
+                });
+            },
+        });
+        </script>
+    </polymer-element>
+
+    <home-page></home-page>
+</body>
