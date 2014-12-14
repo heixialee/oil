@@ -63,9 +63,9 @@ Proprietary and confidential
             this.account_label = user_account_str;
             this.passwd_label = user_passwd_str;
         },
-        selectedChanged: function(oldSelected, newSelected) {
-            this.account_label = newSelected ? admin_account_str : user_account_str;
-            this.passwd_label = newSelected ? admin_passwd_str : user_passwd_str;
+        selectedChanged: function(old_selected, new_selected) {
+            this.account_label = new_selected ? admin_account_str : user_account_str;
+            this.passwd_label = new_selected ? admin_passwd_str : user_passwd_str;
         },
         onClick: function() {
             var type = this.selected ? "admin" : "user";

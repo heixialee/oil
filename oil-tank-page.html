@@ -13,9 +13,117 @@ Proprietary and confidential
 <link rel="import" href="./bower_components/core-animated-pages/transitions/slide-from-right.html">
 <link rel="import" href="./bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="./bower_components/paper-radio-button/paper-radio-button.html">
-<link rel="import" href="./bower_components/paper-input/paper-input.html">
-<link rel="import" href="./bower_components/paper-button/paper-button.html">
-<link rel="import" href="./bower_components/paper-input/paper-input-decorator.html">
+
+<link rel="import" href="./oil-chart.html">
+
+
+<polymer-element name="oil-summary">
+    <template>
+        <style>
+        </style>
+    </template>
+    <script>
+    Polymer({});
+    </script>
+</polymer-element>
+
+<polymer-element name="oil-water">
+    <template>
+        <style>
+        </style>
+        <oil-chart id="chart" samples={{samples}}></oil-chart>
+    </template>
+    <script>
+    Polymer({
+        ready: function() {
+            // TODO(xiang): fetch JSON data from local server.
+            this.samples = [];
+            for (var i = 0; i < 100; ++i)
+                this.samples.push({
+                    time: i,
+                    value: Math.floor(Math.random() * 100)
+                });
+        }
+    });
+    </script>
+</polymer-element>
+
+<polymer-element name="oil-temp">
+    <template>
+        <oil-chart id="chart" samples={{samples}}></oil-chart>
+    </template>
+    <script>
+    Polymer({
+        ready: function() {
+            // TODO(xiang): fetch JSON data from local server.
+            this.samples = [];
+            for (var i = 0; i < 100; ++i)
+                this.samples.push({
+                    time: i,
+                    value: Math.floor(Math.random() * 100)
+                });
+        }
+    });
+    </script>
+</polymer-element>
+
+<polymer-element name="oil-density">
+    <template>
+        <oil-chart id="chart" samples={{samples}}></oil-chart>
+    </template>
+    <script>
+    Polymer({
+        ready: function() {
+            // TODO(xiang): fetch JSON data from local server.
+            this.samples = [];
+            for (var i = 0; i < 100; ++i)
+                this.samples.push({
+                    time: i,
+                    value: Math.floor(Math.random() * 100)
+                });
+        }
+    });
+    </script>
+</polymer-element>
+
+<polymer-element name="oil-volume">
+    <template>
+        <oil-chart id="chart" samples={{samples}}></oil-chart>
+    </template>
+    <script>
+    Polymer({
+        ready: function() {
+            // TODO(xiang): fetch JSON data from local server.
+            this.samples = [];
+            for (var i = 0; i < 100; ++i)
+                this.samples.push({
+                    time: i,
+                    value: Math.floor(Math.random() * 100)
+                });
+        }
+    });
+    </script>
+</polymer-element>
+
+<polymer-element name="oil-weight">
+    <template>
+        <oil-chart id="chart" samples={{samples}}></oil-chart>
+    </template>
+    <script>
+    Polymer({
+        ready: function() {
+            // TODO(xiang): fetch JSON data from local server.
+            this.samples = [];
+            for (var i = 0; i < 100; ++i)
+                this.samples.push({
+                    time: i,
+                    value: Math.floor(Math.random() * 100)
+                });
+        }
+    });
+    </script>
+</polymer-element>
+
 
 <!--
 TODO(xiang): make a base element shared by user-page & admin-page
@@ -31,15 +139,16 @@ TODO(xiang): make a base element shared by user-page & admin-page
             margin: 10px 0 0 0;
         }
         core-icon {
+            color: #3f51b5;
             margin-top: 1px;
             margin-right: 5px;
         }
         core-menu > paper-item.core-selected {
             background: #c5cae9;
         }
-        #logout > div {
+        #backward > div {
+            margin-left: 0px;
             display: inline;
-            margin: 6px;
         }
         core-toolbar > span {
             font-size: 18px;
@@ -66,19 +175,35 @@ TODO(xiang): make a base element shared by user-page & admin-page
             </nav>
 
             <core-toolbar tool flex>
-                <div flex>油罐控制台 ({{tank_id}}号罐)</div>
-                <core-icon-button id="logout" icon="exit-to-app">
-                    <div>登出</div>
+                <div flex>油罐控制台 (#{{tank_id}}号罐)</div>
+                <core-icon-button id="backward" icon="chevron-left">
+                    <div>返回</div>
                 </core-icon-button>
             </core-toolbar>
 
-            <div layout horizontal center-center fit>
+            <div>
+                <!--
+                FIXME(xiang): can we use template to create different custom elements?
+                -->
                 <core-animated-pages id="pages" valueattr="type" selected="{{route}}">
-                    <template repeat="{{s in sections}}">
-                        <section type="{{s.type}}">
-                            <div>{{s.name}}</div>
-                        </section>
-                    </template>
+                    <section type="summary">
+                        <oil-summary></oil-summary>
+                    </section>
+                    <div type="water">
+                        <oil-water></oil-water>
+                    </div>
+                    <section type="temperature">
+                        <oil-temp></oil-temp>
+                    </section>
+                    <section type="density">
+                        <oil-density></oil-density>
+                    </section>
+                    <section type="volume">
+                        <oil-volume></oil-volume>
+                    </section>
+                    <section type="weight">
+                        <oil-weight></oil-weight>
+                    </section>
                 </core-animated-pages>
             </div>
         </core-scaffold>

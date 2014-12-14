@@ -1,0 +1,95 @@
+<!--
+Copyright 2013 The Polymer Authors. All rights reserved.
+Use of this source code is governed by a BSD-style
+license that can be found in the LICENSE file.
+-->
+
+<script src='./bower_components/chart.js/Chart.js'></script>
+
+<polymer-element name="oil-chart" attributes="samples">
+    <template>
+        <style>
+        :host {
+            display: block;
+            margin: 30px;
+        }
+        #controls {
+            margin-top: 20px;
+        }
+        #backward {
+            background: #3f51b5;
+            margin-left: 160px;
+            color: #fff;
+        }
+        #forward {
+            background: #3f51b5;
+            margin-left: 200px;
+            color: #fff;
+        }
+        </style>
+        <canvas id="chart" width="640" height="360"></canvas>
+        <div id="controls" horizontal layout>
+            <paper-button id="backward" on-click="{{onBackward}}">
+                <core-icon icon="arrow-back"></core-icon>
+                往前
+            </paper-button>
+            <paper-button id="forward" on-click="{{onForward}}">
+                <core-icon icon="arrow-forward"></core-icon>
+                往后
+            </paper-button>
+        </div>
+
+    </template>
+    <script>
+    Polymer({
+        attached: function() {
+            this.ctx = this.$.chart.getContext('2d');
+            this.data = {
+                datasets: [{
+                    label: 'water level data',
+                    fillColor: "rgba(151,187,205,0.2)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(151,187,205,1)",
+                }]
+            };
+            this.start = this.samples.length - 10;
+            this.startChanged();
+        },
+        updateChart: function() {
+            if (this.data && this.data.datasets[0].data && this.ctx) {
+                var chart = new Chart(this.ctx);
+                this.chart = chart.Line(this.data, {
+                    bezierCurve: false
+                });
+            }
+        },
+        dataChanged: function() {
+            this.updateChart();
+        },
+        onBackward: function() {
+            var new_start = this.start - 5;
+            this.start = Math.max(0, new_start);
+        },
+        onForward: function() {
+            var new_start = this.start + 5;
+            this.start = Math.min(new_start, this.samples.length - 10);
+        },
+        startChanged: function() {
+            var show_samples = this.samples.slice(this.start, this.start + 10);
+            var show_labels = show_samples.map(function(item) {
+                return item.time;
+            });
+            var show_values = show_samples.map(function(item) {
+                return item.value;
+            });
+            this.data.labels = show_labels;
+            this.data.datasets[0].data = show_values;
+            //FIXME(xiang): why do we need to call this directly??
+            this.dataChanged();
+        }
+    });
+    </script>
+</polymer-element>
