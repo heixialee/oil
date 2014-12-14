@@ -17,26 +17,10 @@ Proprietary and confidential
 <link rel="import" href="./bower_components/paper-button/paper-button.html">
 <link rel="import" href="./bower_components/paper-input/paper-input-decorator.html">
 
-<polymer-element name="admin-summary">
-    <template>
-        <div on-click="{{onChooseOilTank}}">OIL TANK 1</div>
-    </template>
-    <script>
-    Polymer({
-        onChooseOilTank: function() {
-            this.fire('choose-tank', {
-                tank_id: 1,
-            });
-        }
-    });
-    </script>
-</polymer-element>
-
-
 <!--
 TODO(xiang): make a base element shared by user-page & admin-page
 -->
-<polymer-element name="admin-page">
+<polymer-element name="oil-tank-page">
     <template>
         <style>
         core-scaffold /deep/ core-toolbar {
@@ -82,26 +66,19 @@ TODO(xiang): make a base element shared by user-page & admin-page
             </nav>
 
             <core-toolbar tool flex>
-                <div flex>管理员控制台</div>
+                <div flex>油罐控制台 ({{tank_id}}号罐)</div>
                 <core-icon-button id="logout" icon="exit-to-app">
                     <div>登出</div>
                 </core-icon-button>
             </core-toolbar>
 
             <div layout horizontal center-center fit>
-                <!--
-                FIXME(xiang): can we use template to create different custom elements?
-                -->
                 <core-animated-pages id="pages" valueattr="type" selected="{{route}}">
-                    <section type="admin-summary">
-                        <admin-summary></admin-summary>
-                    </section>
-                    <section type="admin-log">
-                        <admin-log></admin-log>
-                    </section>
-                    <section type="admin-users">
-                        <admin-users></admin-users>
-                    </section>
+                    <template repeat="{{s in sections}}">
+                        <section type="{{s.type}}">
+                            <div>{{s.name}}</div>
+                        </section>
+                    </template>
                 </core-animated-pages>
             </div>
         </core-scaffold>
@@ -109,17 +86,29 @@ TODO(xiang): make a base element shared by user-page & admin-page
     <script>
     Polymer({
         ready: function() {
-            this.route = "admin-summary";
+            this.route = "summary";
             this.sections = [{
-                name: '概况汇总',
-                type: 'admin-summary'
+                name: '油罐概况',
+                type: 'summary'
             }, {
-                name: '用户记录',
-                type: 'admin-log'
+                name: '水况详情',
+                type: 'water'
             }, {
-                name: '用户管理',
-                type: 'admin-users'
+                name: '温度详情',
+                type: 'temperature'
+            }, {
+                name: '密度详情',
+                type: 'density'
+            }, {
+                name: '体积详情',
+                type: 'volume'
+            }, {
+                name: '重量详情',
+                type: 'weight'
             }, ];
+        },
+        publish: {
+            tank_id: -1,
         }
     });
     </script>

@@ -17,6 +17,22 @@ Proprietary and confidential
 <link rel="import" href="./bower_components/paper-button/paper-button.html">
 <link rel="import" href="./bower_components/paper-input/paper-input-decorator.html">
 
+<polymer-element name="user-summary">
+    <template>
+        <div on-click="{{onChooseOilTank}}">OIL TANK 1</div>
+    </template>
+    <script>
+    Polymer({
+        onChooseOilTank: function() {
+            this.fire('choose-tank', {
+                tank_id: 1,
+            });
+        }
+    });
+    </script>
+</polymer-element>
+
+
 <!--
 TODO(xiang): make a base element shared by user-page & admin-page
 -->
@@ -45,69 +61,60 @@ TODO(xiang): make a base element shared by user-page & admin-page
             font-size: 18px;
             padding-left: 40px;
         }
+        paper-item a {
+            text-decoration: none;
+            color: currentcolor;
+            margin-left: 5px;
+        }
         </style>
         <core-scaffold>
             <nav>
                 <core-toolbar><span>选项</span>
                 </core-toolbar>
-                <core-menu selected="0">
-                    <paper-item noink>
-                        <core-icon icon="label-outline"></core-icon>
-                        <a href="#summary">概况汇总</a>
-                    </paper-item>
-                    <paper-item noink>
-                        <core-icon icon="label-outline"></core-icon>
-                        <a href="#water">水况详情</a>
-                    </paper-item>
-                    <paper-item noink>
-                        <core-icon icon="label-outline"></core-icon>
-                        <a href="#three">温度详情</a>
-                    </paper-item>
-                    <paper-item noink>
-                        <core-icon icon="label-outline"></core-icon>
-                        <a href="#four">密度详情</a>
-                    </paper-item>
-                    <paper-item noink>
-                        <core-icon icon="label-outline"></core-icon>
-                        <a href="#five">体积详情</a>
-                    </paper-item>
-                                        <paper-item noink>
-                        <core-icon icon="label-outline"></core-icon>
-                        <a href="#five">质量详情</a>
-                    </paper-item>
-                    </paper-item>
+                <core-menu valueattr="type" selected="{{route}}">
+                    <template repeat="{{s in sections}}">
+                        <paper-item type="{{s.type}}" noink>
+                            <core-icon icon="label{{route != s.type ? '-outline' : ''}}"></core-icon>
+                            <div>{{s.name}}</div>
+                        </paper-item>
+                    </template>
                 </core-menu>
             </nav>
 
             <core-toolbar tool flex>
-                <div flex>罐前控制台</div>
+                <div flex>用户控制台</div>
                 <core-icon-button id="logout" icon="exit-to-app">
                     <div>登出</div>
                 </core-icon-button>
             </core-toolbar>
 
             <div layout horizontal center-center fit>
-                <core-animated-pages id="pages" selected="1">
-                    <section layout vertical center-center>
-                        <div>Single</div>
+                <!--
+                FIXME(xiang): can we use template to create different custom elements?
+                -->
+                <core-animated-pages id="pages" valueattr="type" selected="{{route}}">
+                    <section type="user-summary">
+                        <user-summary></user-summary>
                     </section>
-                    <section layout vertical center-center>
-                        <div>page</div>
-                    </section>
-                    <section layout vertical center-center>
-                        <div>app</div>
-                    </section>
-                    <section layout vertical center-center>
-                        <div>using</div>
-                    </section>
-                    <section layout vertical center-center>
-                        <div>Polymer</div>
+                    <section type="user-log">
+                        <user-log></user-log>
                     </section>
                 </core-animated-pages>
             </div>
         </core-scaffold>
     </template>
     <script>
-    Polymer({});
+    Polymer({
+        ready: function() {
+            this.route = "user-summary";
+            this.sections = [{
+                name: '概况汇总',
+                type: 'user-summary'
+            }, {
+                name: '用户记录',
+                type: 'user-log'
+            }, ];
+        }
+    });
     </script>
 </polymer-element>
