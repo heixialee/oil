@@ -1,0 +1,151 @@
+<!--
+Copyright (c) 2014 Long Xiang (seanlong@outlook.com). All rights reserved.
+Unauthorized copying of this file, via any medium is strictly prohibited
+Proprietary and confidential
+-->
+
+<head>
+    <meta http-equiv=Content-Type content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <script src="./bower_components/webcomponentsjs/webcomponents.js"></script>
+    <link rel="import" href="./bower_components/core-pages/core-pages.html">
+    <link rel="import" href="./bower_components/core-scaffold/core-scaffold.html">
+    <link rel="import" href="./bower_components/core-toolbar/core-toolbar.html">
+    <link rel="import" href="./bower_components/core-menu/core-menu.html">
+    <link rel="import" href="./bower_components/core-icon/core-icon.html">
+    <link rel="import" href="./bower_components/core-item/core-item.html">
+    <link rel="import" href="./bower_components/core-field/core-field.html">
+    <link rel="import" href="./bower_components/paper-item/paper-item.html">
+    <link rel="import" href="./bower_components/core-animated-pages/core-animated-pages.html">
+    <link rel="import" href="./bower_components/core-animated-pages/transitions/slide-from-right.html">
+    <link rel="import" href="./bower_components/paper-radio-group/paper-radio-group.html">
+    <link rel="import" href="./bower_components/paper-radio-button/paper-radio-button.html">
+    <link rel="import" href="./bower_components/paper-input/paper-input.html">
+    <link rel="import" href="./bower_components/paper-icon-button/paper-icon-button.html">
+    <link rel="import" href="./bower_components/paper-button/paper-button.html">
+    <link rel="import" href="./bower_components/paper-input/paper-input-decorator.html">
+    <link rel="import" href="./bower_components/paper-tabs/paper-tabs.html">
+    
+    <style>
+    body {
+        font-family: arial, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', '宋体', \5b8b\4f53, Tahoma, Arial, Helvetica, STHeiti;
+    }
+    </style>
+</head>
+
+<!--
+TODO(lipeizhao): the oil tank basic info show
+-->
+<polymer-element name="oil-tank-show">
+    <template>
+        <!--core-scaffold> -->
+          
+        	 <div layout horizontal>
+        	 	  <font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+              <div layout vertical>
+                  <div flex>油品种类</div>
+                  <core-icon class="big" src="./pic/oil_02.png"></core-icon>
+                  <style>
+       	             .big {
+                         height: 500px;
+       	  	             width: 420px;
+                      }
+                   </style>
+                   <div>
+                   	   <p>
+                  		  <font>&nbsp;当前状态:</font>
+                  		  <input type="text" id="status" style="height:30px" name="water" size="20" value="静止" readonly>
+                  	   </p>
+                   </div>
+               </div>
+                  <div layout vertical>
+                  	<p>
+                  		  <font>&nbsp;水面高度: </font>
+                  		  <input type="text" id="water_h" style="height:30px" size="20" value="{{water_h}}" readonly>
+                  		  <font>mm</font>
+                  	</p>
+                  	<p>
+                  		  <font>&nbsp;油面低位: </font>
+                  		  <input type="text" style="height:30px" size="20" value="{{oil_l}}" readonly>
+                        <font>mm</font>
+                  	</p>
+                    <p>
+                  		   <font>&nbsp;油面高位: </font>
+                  		   <input type="text" style="height:30px" size="20" value="{{oil_h}}" readonly>
+                         <font>mm</font>
+                  	</p>
+                  	<p>
+                  		  <font>&nbsp;平均温度:</font>
+                  		  <input type="text" style="height:30px" size="20" value="{{temp}}" readonly>
+                  		  <font>&#176;C</font>
+                  	</p>
+                  	<p>
+                  		  <font>&nbsp;油品体积:</font>
+                  		  <input type="text" style="height:30px" size="20" value="{{volume}}" readonly>
+                  		  <font>m<sup>3</sup></font>
+                  	</p>
+                  	<p>
+                  		  <font>&nbsp;油品质量:</font>
+                  		  <input type="text" style="height:30px" size="20" value="{{weight}}" readonly>
+                  		  <font>kg</font>
+                  	</p>
+                  	<p>
+                  		  <font>&nbsp;油品密度:</font>
+                  		  <input type="text" style="height:30px" size="20" value="{{density}}" readonly>
+                  		  <font>kg/m</font>
+                  	</p>
+                  </div>
+               <div>
+        <!--/core-scaffold> -->
+    </template>
+    <script>
+    var owner_value=100;
+    Polymer({
+    	 ready: function(){
+    	 	   this.owner=owner_value;
+    	 	   this.water_h=0;
+    	 	   this.oil_l=0;
+    	 	   this.oil_h=0;
+    	 	   this.weight=0
+    	 	   this.temp=0;
+    	 	   this.volume=0;
+    	 	   this.density=0;
+    	 	   this.click=onClick();
+    	 	   //t=setTimeout("update()",500)
+    	 },
+    	 onClick: function() {
+        	this.alert("loginout")
+        }
+    });
+    tank = new Object();
+    </script>
+</polymer-element>
+
+<script src="./single_tank.js">
+</script>
+
+<body onload="test_update()">
+<core-scaffold>   
+	  <nav>
+	  	  <core-toolbar><span>菜单</span>
+        </core-toolbar>
+        
+        <core-menu valueattr="type" selected="{{route}}">
+            <paper-item noink>设置</paper-item>
+            <paper-item noink>查看</paper-item>
+        </core-menu>
+	  </nav>
+	  <core-header-panel flex>
+	  	 <core-toolbar tool flex>
+           <div flex>油罐控制台</div>
+              <core-icon-button id="logout" icon="exit-to-app">
+                    <div>登出</div>
+              </core-icon-button>
+        </core-toolbar>
+	  </core-header-panel>
+	  
+	  <br><br><br><br>
+	  <oil-tank-show></oil-tank-show>
+</core-scaffold>
+</body>
