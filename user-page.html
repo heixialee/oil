@@ -80,7 +80,7 @@ TODO(xiang): make a base element shared by user-page & admin-page
 
             <core-toolbar tool flex>
                 <div flex>用户控制台</div>
-                <core-icon-button id="logout" icon="exit-to-app">
+                <core-icon-button id="logout" icon="exit-to-app" on-click="{{onClick}}">
                     <div>登出</div>
                 </core-icon-button>
             </core-toolbar>
@@ -111,6 +111,9 @@ TODO(xiang): make a base element shared by user-page & admin-page
                 name: '用户记录',
                 type: 'user-log'
             }, ];
+        },
+        onClick: function() {
+        	this.fire("loginout")
         }
     });
     </script>
