@@ -1,0 +1,12 @@
+{
+  "name": "oil",
+  "version": "0.0.1",
+  "main": "vulcanized.html",
+    "window": {
+	"title": "油罐管理系统",
+	"icon": "icon.jpg",
+    "toolbar": false,
+    "frame": true,
+	"fullscreen": true
+	}
+}
