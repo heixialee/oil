@@ -8,6 +8,7 @@ Proprietary and confidential
 <link rel="import" href="./bower_components/core-toolbar/core-toolbar.html">
 <link rel="import" href="./bower_components/core-menu/core-menu.html">
 <link rel="import" href="./bower_components/core-icon/core-icon.html">
+<link rel="import" href="./bower_components/core-item/core-item.html">
 <link rel="import" href="./bower_components/paper-item/paper-item.html">
 <link rel="import" href="./bower_components/core-animated-pages/core-animated-pages.html">
 <link rel="import" href="./bower_components/core-animated-pages/transitions/slide-from-right.html">
@@ -17,17 +18,21 @@ Proprietary and confidential
 <link rel="import" href="./bower_components/paper-button/paper-button.html">
 <link rel="import" href="./bower_components/paper-input/paper-input-decorator.html">
 
+<link rel="import" href="./oil-tank.html">
+
 <polymer-element name="admin-summary">
     <template>
-        <div on-click="{{onChooseOilTank}}">OIL TANK 1</div>
+        <style>
+        </style>
+        <div horizontal layout wrap>
+            <oil-tank tank_id="1"></oil-tank>
+             <oil-tank tank_id="2"></oil-tank>
+             <oil-tank tank_id="3"></oil-tank>
+             <oil-tank tank_id="4"></oil-tank>
+        </div>
     </template>
     <script>
     Polymer({
-        onChooseOilTank: function() {
-            this.fire('choose-tank', {
-                tank_id: 1,
-            });
-        }
     });
     </script>
 </polymer-element>
@@ -88,7 +93,7 @@ TODO(xiang): make a base element shared by user-page & admin-page
                 </core-icon-button>
             </core-toolbar>
 
-            <div layout horizontal center-center fit>
+            <div layout>
                 <!--
                 FIXME(xiang): can we use template to create different custom elements?
                 -->
@@ -122,7 +127,7 @@ TODO(xiang): make a base element shared by user-page & admin-page
             }, ];
         },
         onClick: function() {
-        	this.fire("logout");
+            this.fire("logout");
         }
     });
     </script>

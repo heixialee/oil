@@ -51,14 +51,14 @@ Proprietary and confidential
                         that.selected = 2;
                 });
                 this.$.admin_pg.addEventListener('choose-tank', function(e) {
-                    that.$.oil_tank_pg.tank_id = e.detail.tank_id;
+                    that.$.oil_tank_pg.tank_id = e.detail.id;
                     that.selected = 3;
                 });
                 this.$.admin_pg.addEventListener('logout', function(e) {
                     that.selected = 0;
                 });
                 this.$.user_pg.addEventListener('choose-tank', function(e) {
-                    that.$.oil_tank_pg.tank_id = e.detail.tank_id;
+                    that.$.oil_tank_pg.tank_id = e.detail.id;
                     that.selected = 3;
                 });
                 this.$.user_pg.addEventListener('logout', function(e) {

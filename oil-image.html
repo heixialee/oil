@@ -1,0 +1,84 @@
+<!--
+Copyright (c) 2014 Long Xiang (seanlong@outlook.com). All rights reserved.
+Unauthorized copying of this file, via any medium is strictly prohibited
+Proprietary and confidential
+-->
+
+<script type="text/javascript" src="./bower_components/paper.js/paper-full.min.js"></script>
+
+<polymer-element name='oil-image'>
+    <template>
+        <style>
+        </style>
+        <canvas id="oil_tank" width="220" height="240"></canvas>
+    </template>
+    <script>
+    var color = '#5C6BC0';
+    Polymer({
+        attached: function() {
+            var canvas = this.$.oil_tank;
+            paper.setup(canvas);
+            this.draw();
+        },
+        // FIXME(xiang): currently this's a tricky way to draw the color.
+        draw: function() {
+            if (this.type == 'small') {
+                var top = 50;
+                var left = 20;
+                var radius = [90, 30];
+                var height = 140;
+                center_x = left + radius[0];
+                right = left + radius[0] * 2;
+                var bottom_ellipse = new paper.Path.Ellipse({
+                    center: [center_x, top + height],
+                    radius: radius,
+                    strokeColor: 'black',
+                    strokeWidth: 5
+                });
+                if (this.curr > 0 && this.curr <= 1) {
+                    var rect = new paper.Shape.Rectangle({
+                        topLeft: [left, top + (1 - this.curr) * height],
+                        bottomRight: [right, top + height],
+                        fillColor: color
+                    });
+                    var e1 = new paper.Shape.Ellipse({
+                        center: [center_x, top + height],
+                        radius: radius,
+                        fillColor: color
+                    });
+                    var e2 = new paper.Shape.Ellipse({
+                        center: [center_x, top + (1 - this.curr) * height],
+                        radius: radius,
+                        strokeColor: 'black',
+                        fillColor: color
+                    });
+                }
+                var top_ellipse = new paper.Path.Ellipse({
+                    center: [center_x, top],
+                    radius: radius,
+                    strokeColor: 'black',
+                    strokeWidth: 4
+                });
+
+                var left_border = new paper.Path.Line({
+                    from: [left, top + 2],
+                    to: [left, top + height - 3],
+                    strokeColor: 'black',
+                    strokeWidth: 3
+                });
+                var right_border = new paper.Path.Line({
+                    from: [right, top + 2],
+                    to: [right, top + height - 3],
+                    strokeColor: 'black',
+                    strokeWidth: 3
+                });
+                paper.view.draw();
+            } else if (this.type == 'large') {}
+        },
+        publish: {
+            type: 'small',
+            curr: 0.0, //in percentage          
+        }
+    });
+    </script>
+</polymer-element>
