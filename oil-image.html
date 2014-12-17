@@ -13,7 +13,8 @@ Proprietary and confidential
         <canvas id="oil_tank"></canvas>
     </template>
     <script>
-    var color = '#5C6BC0';
+    var fillColor = '#90A4AE';
+    var strokeColor = '#424242';
     Polymer({
         attached: function() {
             var canvas = this.$.oil_tank;
@@ -30,6 +31,26 @@ Proprietary and confidential
         },
         // FIXME(xiang): currently this's a tricky way to draw the color.
         drawInternal: function(top, left, radius, height) {
+            function drawDecorator() {
+                var step = height / 5;
+                var w = 10;
+                var path = new paper.Path.Line({
+                    from: [left - w, top],
+                    to: [left - w, top + height],
+                    strokeWidth: 3,
+                    strokeColor: strokeColor
+                });
+                for (var i = 0; i < 6; i++) {
+                    var path = new paper.Path.Line({
+                        from: [left - w, top + i * step],
+                        to: [left, top + i * step],
+                        strokeWidth: 3,
+                        strokeColor: strokeColor
+                    });
+                }
+            }
+            drawDecorator();
+
             this.items.forEach(function(i) {
                 i.remove();
             });
@@ -39,45 +60,45 @@ Proprietary and confidential
             var bottom_ellipse = new paper.Path.Ellipse({
                 center: [center_x, top + height],
                 radius: radius,
-                strokeColor: 'black',
+                strokeColor: strokeColor,
                 strokeWidth: 5
             });
             if (this.curr > 0 && this.curr <= 1) {
                 var rect = new paper.Shape.Rectangle({
                     topLeft: [left, top + (1 - this.curr) * height],
                     bottomRight: [right, top + height],
-                    fillColor: color
+                    fillColor: fillColor
                 });
                 var e1 = new paper.Shape.Ellipse({
                     center: [center_x, top + height],
                     radius: radius,
-                    fillColor: color
+                    fillColor: fillColor
                 });
                 var e2 = new paper.Shape.Ellipse({
                     center: [center_x, top + (1 - this.curr) * height],
                     radius: radius,
-                    strokeColor: 'black',
-                    fillColor: color
+                    strokeColor: strokeColor,
+                    fillColor: fillColor
                 });
                 this.items.push(rect, e1, e2);
             }
             var top_ellipse = new paper.Path.Ellipse({
                 center: [center_x, top],
                 radius: radius,
-                strokeColor: 'black',
+                strokeColor: strokeColor,
                 strokeWidth: 4
             });
 
             var left_border = new paper.Path.Line({
                 from: [left, top + 2],
                 to: [left, top + height - 3],
-                strokeColor: 'black',
+                strokeColor: strokeColor,
                 strokeWidth: 3
             });
             var right_border = new paper.Path.Line({
                 from: [right, top + 2],
                 to: [right, top + height - 3],
-                strokeColor: 'black',
+                strokeColor: strokeColor,
                 strokeWidth: 3
             });
             this.items.push(bottom_ellipse, top_ellipse, left_border, right_border);
