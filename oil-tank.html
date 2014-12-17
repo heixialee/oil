@@ -191,7 +191,7 @@ Proprietary and confidential
         [1.8, 3.7, 1.2, 22.8, 178.6, 812],
         [0.7, 1.2, 0.2, 19.2, 69.5, 822],
         [3.5, 6.9, 3.2, 38.3, 330.5, 812],
-        [2.3, 8.5, 1.6, 20.9, 423.5, 810],
+        [2.2, 4.5, 2.4, 24.9, 270.5, 811],
         [2.3, 8.5, 1.6, 20.9, 423.5, 810],
     ];
     Polymer({
@@ -231,6 +231,9 @@ Proprietary and confidential
                 oil_density: mock_data[idx][5],
                 oil_weight: Math.floor(mock_data[idx][4] * mock_data[idx][5]),
             };
+            if (!this.$.oil_level || !this.$.water_level || !this.$.temp)
+                return;
+
             // FIXME(xiang): hard code the oil waring threshold
             if (this.data.oil_level_low < 1) {
                 this.$.oil_level.disabled = false;
@@ -239,6 +242,7 @@ Proprietary and confidential
                 this.$.oil_level.checked = false;
                 this.$.oil_level.disabled = true;
             }
+
             if (this.data.water_level < 0.5) {
                 this.$.water_level.disabled = false;
                 this.$.water_level.checked = true;
@@ -246,6 +250,7 @@ Proprietary and confidential
                 this.$.water_level.checked = false;
                 this.$.water_level.disabled = true;
             }
+
             if (this.data.temperature > 38) {
                 this.$.temp.disabled = false;
                 this.$.temp.checked = true;
@@ -253,6 +258,7 @@ Proprietary and confidential
                 this.$.temp.checked = false;
                 this.$.temp.disabled = true;
             }
+
         }
     });
     </script>
