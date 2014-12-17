@@ -27,7 +27,8 @@ license that can be found in the LICENSE file.
             color: #fff;
         }
         </style>
-        <canvas id="chart" width="640" height="360"></canvas>
+        <canvas id="chart"></canvas>
+        <template if="{{type == 'large'}}">
         <div id="controls" horizontal layout>
             <paper-button id="backward" on-click="{{onBackward}}">
                 <core-icon icon="arrow-back"></core-icon>
@@ -38,12 +39,19 @@ license that can be found in the LICENSE file.
                 往后
             </paper-button>
         </div>
-
+        </template>
     </template>
     <script>
     Polymer({
+        publish: {
+            chart_width: 700,
+            chart_height: 360,
+            type: "large",
+        },
         attached: function() {
             this.ctx = this.$.chart.getContext('2d');
+            this.$.chart.width = this.chart_width;
+            this.$.chart.height = this.chart_height;
             this.data = {
                 datasets: [{
                     label: 'water level data',
@@ -62,7 +70,10 @@ license that can be found in the LICENSE file.
             if (this.data && this.data.datasets[0].data && this.ctx) {
                 var chart = new Chart(this.ctx);
                 this.chart = chart.Line(this.data, {
-                    bezierCurve: false
+                    bezierCurve: true,
+                    showScale: this.type == 'large' ? true : false,
+                    showTooltips: this.type == 'large' ? true : false,
+                    datasetFill: this.type == 'large' ? true : false,
                 });
             }
         },

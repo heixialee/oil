@@ -10,74 +10,100 @@ Proprietary and confidential
     <template>
         <style>
         </style>
-        <canvas id="oil_tank" width="220" height="240"></canvas>
+        <canvas id="oil_tank"></canvas>
     </template>
     <script>
     var color = '#5C6BC0';
     Polymer({
         attached: function() {
             var canvas = this.$.oil_tank;
+            if (this.type == "small") {
+                canvas.width = 220;
+                canvas.height = 240;
+            } else if (this.type == "large") {
+                canvas.width = 420;
+                canvas.height = 460;
+            }
             paper.setup(canvas);
+            this.items = [];
             this.draw();
         },
         // FIXME(xiang): currently this's a tricky way to draw the color.
-        draw: function() {
-            if (this.type == 'small') {
-                var top = 50;
-                var left = 20;
-                var radius = [90, 30];
-                var height = 140;
-                center_x = left + radius[0];
-                right = left + radius[0] * 2;
-                var bottom_ellipse = new paper.Path.Ellipse({
+        drawInternal: function(top, left, radius, height) {
+            this.items.forEach(function(i) {
+                i.remove();
+            });
+            this.items = [];
+            center_x = left + radius[0];
+            right = left + radius[0] * 2;
+            var bottom_ellipse = new paper.Path.Ellipse({
+                center: [center_x, top + height],
+                radius: radius,
+                strokeColor: 'black',
+                strokeWidth: 5
+            });
+            if (this.curr > 0 && this.curr <= 1) {
+                var rect = new paper.Shape.Rectangle({
+                    topLeft: [left, top + (1 - this.curr) * height],
+                    bottomRight: [right, top + height],
+                    fillColor: color
+                });
+                var e1 = new paper.Shape.Ellipse({
                     center: [center_x, top + height],
                     radius: radius,
-                    strokeColor: 'black',
-                    strokeWidth: 5
+                    fillColor: color
                 });
-                if (this.curr > 0 && this.curr <= 1) {
-                    var rect = new paper.Shape.Rectangle({
-                        topLeft: [left, top + (1 - this.curr) * height],
-                        bottomRight: [right, top + height],
-                        fillColor: color
-                    });
-                    var e1 = new paper.Shape.Ellipse({
-                        center: [center_x, top + height],
-                        radius: radius,
-                        fillColor: color
-                    });
-                    var e2 = new paper.Shape.Ellipse({
-                        center: [center_x, top + (1 - this.curr) * height],
-                        radius: radius,
-                        strokeColor: 'black',
-                        fillColor: color
-                    });
-                }
-                var top_ellipse = new paper.Path.Ellipse({
-                    center: [center_x, top],
+                var e2 = new paper.Shape.Ellipse({
+                    center: [center_x, top + (1 - this.curr) * height],
                     radius: radius,
                     strokeColor: 'black',
-                    strokeWidth: 4
+                    fillColor: color
                 });
+                this.items.push(rect, e1, e2);
+            }
+            var top_ellipse = new paper.Path.Ellipse({
+                center: [center_x, top],
+                radius: radius,
+                strokeColor: 'black',
+                strokeWidth: 4
+            });
 
-                var left_border = new paper.Path.Line({
-                    from: [left, top + 2],
-                    to: [left, top + height - 3],
-                    strokeColor: 'black',
-                    strokeWidth: 3
-                });
-                var right_border = new paper.Path.Line({
-                    from: [right, top + 2],
-                    to: [right, top + height - 3],
-                    strokeColor: 'black',
-                    strokeWidth: 3
-                });
-                paper.view.draw();
-            } else if (this.type == 'large') {}
+            var left_border = new paper.Path.Line({
+                from: [left, top + 2],
+                to: [left, top + height - 3],
+                strokeColor: 'black',
+                strokeWidth: 3
+            });
+            var right_border = new paper.Path.Line({
+                from: [right, top + 2],
+                to: [right, top + height - 3],
+                strokeColor: 'black',
+                strokeWidth: 3
+            });
+            this.items.push(bottom_ellipse, top_ellipse, left_border, right_border);
+            paper.view.draw();
+        },
+        drawSmall: function() {
+            this.drawInternal(50, 20, [90, 30], 140);
+        },
+        drawLarge: function() {
+            this.drawInternal(50, 20, [160, 40], 250);
+        },
+        draw: function() {
+            if (this.type == 'small') {
+                this.drawSmall();
+            } else if (this.type == 'large') {
+                this.drawLarge();
+            }
         },
         publish: {
             type: 'small',
-            curr: 0.0, //in percentage          
+            curr: -1, //in percentage          
+        },
+        currChanged: function(old_curr, new_curr) {
+            // Avoid remove image when change from -1
+            if (old_curr >= 0)
+                this.draw();
         }
     });
     </script>

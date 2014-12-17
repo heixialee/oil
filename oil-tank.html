@@ -7,35 +7,62 @@ Proprietary and confidential
 <link rel="import" href="./bower_components/core-item/core-item.html">
 
 <link rel="import" href="./oil-image.html">
+<link rel="import" href="./oil-chart.html">
 
+<polymer-element name="small-chart">
+    <template>
+        <style>
+        oil-chart {
+            margin: 0px;
+        }
+        </style>
+        <oil-chart id="chart" type="small" chart_width="160" , chart_height="100" samples={{samples}}></oil-chart>
+    </template>
+    <script>
+    Polymer({
+        publish: {
+            category: '' //TODO(xiang): should be oil-height, oil-water...
+        },
+        ready: function() {
+            // TODO(xiang): fetch JSON data from local server.
+            this.samples = [];
+            for (var i = 0; i < 100; ++i)
+                this.samples.push({
+                    time: i,
+                    value: Math.floor(Math.random() * 100)
+                });
+        }
+    });
+    </script>
+</polymer-element>
 
 <polymer-element name="oil-tank">
     <template>
-        <style>
-        .oil-tank {
-            margin: 20px 10px 40px 20px;
-        }
-        oil-image {
-            margin-right: 40px;
-        }
-        .name {
-            border-bottom: 4px solid #4caf50;
-            font-size: 24px;
-            font: bold;
-        }
-        core-item {
-            border-bottom: 1px solid #bdbdbd;
-        }
-        data {
-            margin-left: 4px;
-            margin-top: 4px;
-        }
-        </style>
-        <div class='oil-tank' horizontal layout>
-            <oil-image on-click={{onChoose}} curr={{data.oil_level_high/height}}></oil-image>
-            <div vertical layout>
-                <div class='name'>#{{tank_id}}号罐</div>
-                <div>
+        <template if="{{tank_id > 0 && type == 'outline'}}">
+            <style>
+            .oil-tank {
+                margin: 20px 10px 40px 20px;
+            }
+            oil-image {
+                margin-right: 40px;
+            }
+            .name {
+                border-bottom: 4px solid #4caf50;
+                font-size: 24px;
+                font: bold;
+            }
+            core-item {
+                border-bottom: 1px solid #bdbdbd;
+            }
+            data {
+                margin-left: 4px;
+                margin-top: 4px;
+            }
+            </style>
+            <div class='oil-tank' horizontal layout>
+                <oil-image type="small" on-click={{onChoose}} curr={{data.oil_level_high/height}}></oil-image>
+                <div vertical layout>
+                    <div class='name'>#{{tank_id}}号罐</div>
                     <core-item src="images/oil_low.png" label="油面低位: ">
                         <data>{{data.oil_level_low}} m</data>
                     </core-item>
@@ -65,7 +92,60 @@ Proprietary and confidential
                     </core-item>
                 </div>
             </div>
-        </div>
+        </template>
+        <template if="{{tank_id > 0 && type=='detail'}}">
+            <style>
+            .oil-tank {
+                margin: 50px 0px 0px 50px;
+            }
+            core-item {
+                border-bottom: 1px solid #bdbdbd;
+            }
+            data {
+                margin-left: 4px;
+                margin-top: 4px;
+            }
+            </style>
+            <div class='oil-tank' horizontal layout>
+                <oil-image type="large" curr={{data.oil_level_high/height}}></oil-image>
+                <div vertical layout>
+                    <core-item src="images/oil_low.png" label="油面低位: " on-click="{{onChooseCategory}}">
+                        <data>{{data.oil_level_low}} m</data>
+                        <small-chart></small-chart>
+                    </core-item>
+                    <core-item src="images/oil_high.png" label="油面高位: " on-click="{{onChooseCategory}}">
+                        <data>{{data.oil_level_high}} m</data>
+                        <small-chart></small-chart>
+                    </core-item>
+                    <core-item src="images/water.png" label="水面高度: " on-click="{{onChooseCategory}}">
+                        <data>{{data.water_level}} m</data>
+                        <small-chart></small-chart>
+                    </core-item>
+                    <core-item src="images/temperature.png" label="平均温度: " on-click="{{onChooseCategory}}">
+                        <data>{{data.temperature}} °C</data>
+                        <small-chart></small-chart>
+                    </core-item>
+                    <core-item src="images/volume.png" label="油品体积: " on-click="{{onChooseCategory}}">
+                        <data>{{data.oil_volume}}
+                            <font>m<sup>3</sup>
+                            </font>
+                        </data>
+                        <small-chart></small-chart>
+                    </core-item>
+                    <core-item src="images/density.png" label="油品密度: " on-click="{{onChooseCategory}}">
+                        <data>{{data.oil_density}} kg/
+                            <font>m<sup>3</sup>
+                            </font>
+                        </data>
+                        <small-chart></small-chart>
+                    </core-item>
+                    <core-item src="images/weight.png" label="油品质量: " on-click="{{onChooseCategory}}">
+                        <data>{{data.oil_weight}} kg</data>
+                        <small-chart></small-chart>
+                    </core-item>
+                </div>
+            </div>
+        </template>
     </template>
     <script>
     var mock_data = [
@@ -84,10 +164,27 @@ Proprietary and confidential
         ready: function() {},
         publish: {
             tank_id: -1,
-            data: {},
+            type: "outline",
         },
         attached: function() {
-            var idx = this.tank_id;
+            var idx = this.tank_id - 1;
+            // Fallback for test
+            if (idx < 0 || idx > mock_data.length - 1)
+                idx = 0;
+            this.updateData(idx);
+
+        },
+        onChoose: function() {
+            this.fire('choose-tank', {
+                id: this.tank_id,
+            });
+        },
+        onChooseCategory: function() {},
+        tank_idChanged: function(old_id, new_id) {
+            var idx = new_id - 1;
+            this.updateData(idx);
+        },
+        updateData: function(idx) {
             this.data = {
                 oil_level_low: mock_data[idx][0],
                 oil_level_high: mock_data[idx][1],
@@ -97,12 +194,7 @@ Proprietary and confidential
                 oil_density: mock_data[idx][5],
                 oil_weight: Math.floor(mock_data[idx][4] * mock_data[idx][5]),
             };
-        },
-        onChoose: function() {
-            this.fire('choose-tank', {
-                id: this.tank_id,
-            });
-        },
+        }
     });
     </script>
 </polymer-element>

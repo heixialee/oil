@@ -15,15 +15,38 @@ Proprietary and confidential
 <link rel="import" href="./bower_components/paper-radio-button/paper-radio-button.html">
 
 <link rel="import" href="./oil-chart.html">
+<link rel="import" href="./oil-tank.html">
 
-
-<polymer-element name="oil-summary">
+<polymer-element name="oil-summary" attributes="tank_id">
     <template>
         <style>
         </style>
+        <h1>{{tank_id}}</h1>
+        <oil-tank type="detail" tank_id={{tank_id}}></oil-tank>
     </template>
     <script>
     Polymer({});
+    </script>
+</polymer-element>
+
+<polymer-element name="oil-height">
+    <template>
+        <style>
+        </style>
+        <oil-chart id="chart" samples={{samples}}></oil-chart>
+    </template>
+    <script>
+    Polymer({
+        ready: function() {
+            // TODO(xiang): fetch JSON data from local server.
+            this.samples = [];
+            for (var i = 0; i < 100; ++i)
+                this.samples.push({
+                    time: i,
+                    value: Math.floor(Math.random() * 100)
+                });
+        }
+    });
     </script>
 </polymer-element>
 
@@ -130,83 +153,88 @@ TODO(xiang): make a base element shared by user-page & admin-page
 -->
 <polymer-element name="oil-tank-page">
     <template>
-        <style>
-        core-scaffold /deep/ core-toolbar {
-            background-color: #3f51b5;
-            color: #fff;
-        }
-        core-menu {
-            margin: 10px 0 0 0;
-        }
-        core-icon {
-            color: #3f51b5;
-            margin-top: 1px;
-            margin-right: 5px;
-        }
-        core-menu > paper-item.core-selected {
-            background: #c5cae9;
-        }
-        #backward > div {
-            margin-left: 0px;
-            display: inline;
-        }
-        core-toolbar > span {
-            font-size: 18px;
-            padding-left: 40px;
-        }
-        paper-item a {
-            text-decoration: none;
-            color: currentcolor;
-            margin-left: 5px;
-        }
-        </style>
-        <core-scaffold>
-            <nav>
-                <core-toolbar><span>选项</span>
+        <template if="{{tank_id > 0}}">
+            <style>
+            core-scaffold /deep/ core-toolbar {
+                background-color: #3f51b5;
+                color: #fff;
+            }
+            core-menu {
+                margin: 10px 0 0 0;
+            }
+            core-icon {
+                color: #3f51b5;
+                margin-top: 1px;
+                margin-right: 5px;
+            }
+            core-menu > paper-item.core-selected {
+                background: #c5cae9;
+            }
+            #backward > div {
+                margin-left: 0px;
+                display: inline;
+            }
+            core-toolbar > span {
+                font-size: 18px;
+                padding-left: 40px;
+            }
+            paper-item a {
+                text-decoration: none;
+                color: currentcolor;
+                margin-left: 5px;
+            }
+            </style>
+            <core-scaffold>
+                <nav>
+                    <core-toolbar><span>选项</span>
+                    </core-toolbar>
+                    <core-menu valueattr="type" selected="{{route}}">
+                        <template repeat="{{s in sections}}">
+                            <paper-item type="{{s.type}}" noink>
+                                <core-icon icon="label{{route != s.type ? '-outline' : ''}}"></core-icon>
+                                <div>{{s.name}}</div>
+                            </paper-item>
+                        </template>
+                    </core-menu>
+                </nav>
+
+                <core-toolbar tool flex>
+                    <div flex>油罐控制台 (#{{tank_id}}号罐)</div>
+                    <core-icon-button id="backward" icon="chevron-left">
+                        <div>返回</div>
+                    </core-icon-button>
                 </core-toolbar>
-                <core-menu valueattr="type" selected="{{route}}">
-                    <template repeat="{{s in sections}}">
-                        <paper-item type="{{s.type}}" noink>
-                            <core-icon icon="label{{route != s.type ? '-outline' : ''}}"></core-icon>
-                            <div>{{s.name}}</div>
-                        </paper-item>
-                    </template>
-                </core-menu>
-            </nav>
 
-            <core-toolbar tool flex>
-                <div flex>油罐控制台 (#{{tank_id}}号罐)</div>
-                <core-icon-button id="backward" icon="chevron-left">
-                    <div>返回</div>
-                </core-icon-button>
-            </core-toolbar>
-
-            <div>
-                <!--
+                <div>
+                    <!--
                 FIXME(xiang): can we use template to create different custom elements?
                 -->
-                <core-animated-pages id="pages" valueattr="type" selected="{{route}}">
-                    <section type="summary">
-                        <oil-summary></oil-summary>
-                    </section>
-                    <div type="water">
-                        <oil-water></oil-water>
-                    </div>
-                    <section type="temperature">
-                        <oil-temp></oil-temp>
-                    </section>
-                    <section type="density">
-                        <oil-density></oil-density>
-                    </section>
-                    <section type="volume">
-                        <oil-volume></oil-volume>
-                    </section>
-                    <section type="weight">
-                        <oil-weight></oil-weight>
-                    </section>
-                </core-animated-pages>
-            </div>
-        </core-scaffold>
+                    <core-animated-pages id="pages" valueattr="type" selected="{{route}}">
+                        <section type="summary">
+                            <oil-summary tank_id="{{tank_id}}"></oil-summary>
+                        </section>
+                        <div type="height">
+                            <oil-height></oil-height>
+                        </div>
+                        <div type="water">
+                            <oil-water></oil-water>
+                        </div>
+                        <section type="temperature">
+                            <oil-temp></oil-temp>
+                        </section>
+                        <section type="density">
+                            <oil-density></oil-density>
+                        </section>
+                        <section type="volume">
+                            <oil-volume></oil-volume>
+                        </section>
+                        <section type="weight">
+                            <oil-weight></oil-weight>
+                        </section>
+                    </core-animated-pages>
+                </div>
+            </core-scaffold>
+        </template>
     </template>
     <script>
     Polymer({
@@ -216,7 +244,10 @@ TODO(xiang): make a base element shared by user-page & admin-page
                 name: '油罐概况',
                 type: 'summary'
             }, {
-                name: '水况详情',
+                name: '油高详情',
+                type: 'height'
+            }, {
+                name: '水高详情',
                 type: 'water'
             }, {
                 name: '温度详情',
