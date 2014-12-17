@@ -5,6 +5,7 @@ Proprietary and confidential
 -->
 
 <link rel="import" href="./bower_components/core-item/core-item.html">
+<link rel="import" href="./bower_components/paper-radio-button/paper-radio-button.html">
 
 <link rel="import" href="./oil-image.html">
 <link rel="import" href="./oil-chart.html">
@@ -14,9 +15,10 @@ Proprietary and confidential
         <style>
         oil-chart {
             margin: 0px;
+            margin-left: 20px;
         }
         </style>
-        <oil-chart id="chart" type="small" chart_width="160" , chart_height="100" samples={{samples}}></oil-chart>
+        <oil-chart id="chart" type="small" chart_width="120" , chart_height="50" samples={{samples}}></oil-chart>
     </template>
     <script>
     Polymer({
@@ -105,10 +107,33 @@ Proprietary and confidential
                 margin-left: 4px;
                 margin-top: 4px;
             }
+            .desc {
+                margin-left: 20px;
+            }
+            .indicator > .title {
+                font-size: 18px;
+                font-weight: 10px;
+                margin-left: 50px;
+                margin-right: 20px;
+                margin-top: -8px;
+                padding: 4px;
+                border: 2px solid;
+            }
+            .indicator > paper-radio-button {
+                margin-top: 3px;
+                margin-left: 5px;
+                margin-right: 15px;
+            }
+            paper-radio-button::shadow #ink[checked] {
+                color: #F44336;
+            }
+            paper-radio-button::shadow #onRadio {
+                background-color: #F44336;
+            }
             </style>
             <div class='oil-tank' horizontal layout>
                 <oil-image type="large" curr={{data.oil_level_high/height}}></oil-image>
-                <div vertical layout>
+                <div class='desc' vertical layout>
                     <core-item src="images/oil_low.png" label="油面低位: " on-click="{{onChooseCategory}}">
                         <data>{{data.oil_level_low}} m</data>
                         <small-chart></small-chart>
@@ -145,11 +170,24 @@ Proprietary and confidential
                     </core-item>
                 </div>
             </div>
+            <div class="indicator" layout horizontal>
+                <div class="title">
+                    <b>预警状态</b>
+                </div>
+                <b>水位:</b>
+                <paper-radio-button id="water_level" disabled></paper-radio-button>
+                <b>油位:</b>
+                <paper-radio-button id="oil_level" disabled></paper-radio-button>
+                <b>温度:</b>
+                <paper-radio-button id="temp" disabled></paper-radio-button>
+                <b>泄露:</b>
+                <paper-radio-button id="leak" disabled></paper-radio-button>
+            </div>
         </template>
     </template>
     <script>
     var mock_data = [
-        [2.3, 8.5, 1.6, 20.9, 423.5, 810],
+        [2.3, 8.5, 1.6, 39.9, 423.5, 810],
         [1.8, 3.7, 1.2, 22.8, 178.6, 812],
         [0.7, 1.2, 0.2, 19.2, 69.5, 822],
         [3.5, 6.9, 3.2, 38.3, 330.5, 812],
@@ -172,7 +210,6 @@ Proprietary and confidential
             if (idx < 0 || idx > mock_data.length - 1)
                 idx = 0;
             this.updateData(idx);
-
         },
         onChoose: function() {
             this.fire('choose-tank', {
@@ -194,6 +231,28 @@ Proprietary and confidential
                 oil_density: mock_data[idx][5],
                 oil_weight: Math.floor(mock_data[idx][4] * mock_data[idx][5]),
             };
+            // FIXME(xiang): hard code the oil waring threshold
+            if (this.data.oil_level_low < 1) {
+                this.$.oil_level.disabled = false;
+                this.$.oil_level.checked = true;
+            } else {
+                this.$.oil_level.checked = false;
+                this.$.oil_level.disabled = true;
+            }
+            if (this.data.water_level < 0.5) {
+                this.$.water_level.disabled = false;
+                this.$.water_level.checked = true;
+            } else {
+                this.$.water_level.checked = false;
+                this.$.water_level.disabled = true;
+            }
+            if (this.data.temperature > 38) {
+                this.$.temp.disabled = false;
+                this.$.temp.checked = true;
+            } else {
+                this.$.temp.checked = false;
+                this.$.temp.disabled = true;
+            }
         }
     });
     </script>
