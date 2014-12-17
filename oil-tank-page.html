@@ -199,7 +199,7 @@ TODO(xiang): make a base element shared by user-page & admin-page
 
                 <core-toolbar tool flex>
                     <div flex>油罐控制台 (#{{tank_id}}号罐)</div>
-                    <core-icon-button id="backward" icon="chevron-left">
+                    <core-icon-button id="backward" icon="chevron-left" on-click="{{onBackward}}">
                         <div>返回</div>
                     </core-icon-button>
                 </core-toolbar>
@@ -264,6 +264,9 @@ TODO(xiang): make a base element shared by user-page & admin-page
         },
         publish: {
             tank_id: -1,
+        },
+        onBackward: function() {
+            this.fire("backward");
         }
     });
     </script>

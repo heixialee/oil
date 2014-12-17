@@ -43,6 +43,7 @@ Proprietary and confidential
         Polymer({
             ready: function() {
                 this.selected = 0;
+                this.prev_selected = 0;
                 var that = this;
                 this.$.login_pg.addEventListener('login', function(e) {
                     if (e.detail.type == 'user')
@@ -52,17 +53,24 @@ Proprietary and confidential
                 });
                 this.$.admin_pg.addEventListener('choose-tank', function(e) {
                     that.$.oil_tank_pg.tank_id = e.detail.id;
+                    that.prev_selected = that.selected;
                     that.selected = 3;
                 });
                 this.$.admin_pg.addEventListener('logout', function(e) {
                     that.selected = 0;
+                    this.prev_selected = 0;
                 });
                 this.$.user_pg.addEventListener('choose-tank', function(e) {
                     that.$.oil_tank_pg.tank_id = e.detail.id;
+                    that.prev_selected = that.selected;
                     that.selected = 3;
                 });
                 this.$.user_pg.addEventListener('logout', function(e) {
                     that.selected = 0;
+                    this.prev_selected = 0;
+                });
+                this.$.oil_tank_pg.addEventListener('backward', function(e) {
+                    that.selected = that.prev_selected;
                 });
             },
         });
