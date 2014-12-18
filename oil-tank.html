@@ -7,6 +7,8 @@ Proprietary and confidential
 <link rel="import" href="./bower_components/core-item/core-item.html">
 <link rel="import" href="./bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="./bower_components/paper-dialog/paper-action-dialog.html">
+<link rel="import" href="./bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="./bower_components/paper-slider/paper-slider.html">
 
 <link rel="import" href="./oil-image.html">
 <link rel="import" href="./oil-chart.html">
@@ -110,6 +112,7 @@ Proprietary and confidential
             core-item {
                 margin-bottom: 20px;
                 margin-top:20px;
+                margin-right: 20px;
                 height: 40px;
             }
             data {
@@ -148,6 +151,12 @@ Proprietary and confidential
             paper-radio-button::shadow #onRadio {
                 background-color: #F44336;
             }
+            paper-slider{
+                margin-bottom: 20px;
+                margin-top: 20px;
+                margin-left: 20px;
+                width: 100%;
+            }
             .oil_type {
                 margin-top: -60px;
                 margin-left: 190px;
@@ -172,7 +181,7 @@ Proprietary and confidential
                 color: #fff;
             }
             paper-action-dialog {
-                width: 400px;
+                width: 800px;
             }
             </style>
             <div class='oil-tank' horizontal layout>
@@ -245,14 +254,25 @@ Proprietary and confidential
                 <paper-button raised flex on-click="{{onWarningSetting}}">预 警 设 置</paper-button>
                 <paper-action-dialog id="warning_setting_dialog" backdrop autoCloseDisabled layered="false">
                     <div layout vertical>
-                        <div>报警水位:
-                            <paper-input id="water_warning_setting" label="  水位(m)"></paper-input>
+                        <div layout horizontal>
+                            <core-item src="images/water.png" label="水位警报">
+                            </core-item>
+                            <paper-slider id="water_warning_setting" value="1" max="5" editable></paper-slider>
+                            <core-item class="dialog" label=" 水位(m)">
                         </div>
-                        <div>报警油位：
-                            <paper-input id="oil_warning_setting" label="  油位(m)"></paper-input>
+                       
+                        <div layout horizontal>
+                            <core-item src="images/water.png" label="油位警报">
+                            </core-item>
+                            <paper-slider id="oil_warning_setting" value="3" max="20" editable></paper-slider>
+                            <core-item class="dialog" label=" 油位(m)">
                         </div>
-                        <div>报警温度：
-                            <paper-input id="temp_warning_setting" label="  温度(°C)"></paper-input>
+
+                        <div layout horizontal>
+                            <core-item src="images/water.png" label="温度警报">
+                            </core-item>
+                            <paper-slider id="temp_warning_setting" value="10" max="60" editable></paper-slider>
+                            <core-item class="dialog" label="  温度(°C)">
                         </div>
                     </div>
                     <paper-button dismissive on-click={{onCancelWarningSetting}}>取消</paper-button>
@@ -316,6 +336,9 @@ Proprietary and confidential
                 this.data.oil_warning_level = Number(this.$.oil_warning_setting.value);
             if (this.$.temp_warning_setting.value)
                 this.data.temperature_warning = Number(this.$.temp_warning_setting.value);
+            console.log("water:%d", this.data.water_warning_level);
+            console.log("oil:%d", this.data.oil_warning_level);
+            console.log("temp:%d", this.data.temperature_warning);
             this.updateData(this.tank_id - 1);
         },
         onCancelWarningSetting: function() {
