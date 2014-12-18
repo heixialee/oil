@@ -1,10 +1,11 @@
 {
-  "name": "nw-demo",
-  "version": 0.1,
-  "main": "index.html",
+    "name": "nw-demo",
+    "version": 0.1,
+    "main": "index.html",
     "window": {
-    "toolbar": false,
-    "frame": true,
-    "resizable": false
-	}
+        "title": "上海骏越油罐管理系统",
+        "toolbar": false,
+        "frame": true,
+        "resizable": false
+    }
 }

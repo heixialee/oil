@@ -6,6 +6,7 @@ Proprietary and confidential
 
 <link rel="import" href="./bower_components/core-item/core-item.html">
 <link rel="import" href="./bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="./bower_components/paper-dialog/paper-action-dialog.html">
 
 <link rel="import" href="./oil-image.html">
 <link rel="import" href="./oil-chart.html">
@@ -18,7 +19,7 @@ Proprietary and confidential
             margin-left: 20px;
         }
         </style>
-        <oil-chart id="chart" type="small" chart_width="120" , chart_height="50" samples={{samples}}></oil-chart>
+        <oil-chart id="chart" type="small" chart_width="140" , chart_height="50" samples={{samples}}></oil-chart>
     </template>
     <script>
     Polymer({
@@ -110,10 +111,13 @@ Proprietary and confidential
             .desc {
                 margin-left: 20px;
             }
+            .indicator {
+                margin-top: 30px;
+            }
             .indicator > .title {
                 font-size: 18px;
                 font-weight: 10px;
-                margin-left: 50px;
+                margin-left: 10px;
                 margin-right: 20px;
                 margin-top: -8px;
                 padding: 4px;
@@ -129,6 +133,27 @@ Proprietary and confidential
             }
             paper-radio-button::shadow #onRadio {
                 background-color: #F44336;
+            }
+            .settings {
+                margin-top: -40px;
+                margin-left: 20px;
+                width: 400px;
+            }
+            .settings > paper-button {
+                background: #3F51B5;
+                color: #fff;
+                margin-left: 40px;
+            }
+            [dismissive] {
+                background: #BDBDBD;
+                color: #000;
+            }
+            [affirmative] {
+                background: #4caf50;
+                color: #fff;
+            }
+            paper-action-dialog {
+                width: 400px;
             }
             </style>
             <div class='oil-tank' horizontal layout>
@@ -168,20 +193,51 @@ Proprietary and confidential
                         <data>{{data.oil_weight}} kg</data>
                         <small-chart></small-chart>
                     </core-item>
+                    <div class="indicator" layout horizontal>
+                        <div class="title">
+                            <b>预警状态</b>
+                        </div>
+                        <b>水位:</b>
+                        <paper-radio-button id="water_level" disabled></paper-radio-button>
+                        <b>油位:</b>
+                        <paper-radio-button id="oil_level" disabled></paper-radio-button>
+                        <b>温度:</b>
+                        <paper-radio-button id="temp" disabled></paper-radio-button>
+                        <b>泄露:</b>
+                        <paper-radio-button id="leak" disabled></paper-radio-button>
+                    </div>
                 </div>
             </div>
-            <div class="indicator" layout horizontal>
-                <div class="title">
-                    <b>预警状态</b>
-                </div>
-                <b>水位:</b>
-                <paper-radio-button id="water_level" disabled></paper-radio-button>
-                <b>油位:</b>
-                <paper-radio-button id="oil_level" disabled></paper-radio-button>
-                <b>温度:</b>
-                <paper-radio-button id="temp" disabled></paper-radio-button>
-                <b>泄露:</b>
-                <paper-radio-button id="leak" disabled></paper-radio-button>
+            <div layout horizontal class="settings">
+                <paper-button raised flex on-click="{{onTankSetting}}">油 罐 设 置</paper-button>
+                <paper-action-dialog id="tank_setting_dialog" backdrop autoCloseDisabled layered="false">
+                    <div layout vertical>
+                        <div>油桶高度:
+                            <paper-input label="  水位(m)"></paper-input>
+                        </div>
+                        <div>油桶半径：
+                            <paper-input label="  油位(m)"></paper-input>
+                        </div>
+                    </div>
+                    <paper-button dismissive>取消</paper-button>
+                    <paper-button affirmative autofocus>确定</paper-button>
+                </paper-action-dialog>
+                <paper-button raised flex on-click="{{onWarningSetting}}">预 警 设 置</paper-button>
+                <paper-action-dialog id="warning_setting_dialog" backdrop autoCloseDisabled layered="false">
+                    <div layout vertical>
+                        <div>报警水位:
+                            <paper-input id="water_warning_setting" label="  水位(m)"></paper-input>
+                        </div>
+                        <div>报警油位：
+                            <paper-input id="oil_warning_setting" label="  油位(m)"></paper-input>
+                        </div>
+                        <div>报警温度：
+                            <paper-input id="temp_warning_setting" label="  温度(°C)"></paper-input>
+                        </div>
+                    </div>
+                    <paper-button dismissive on-click={{onCancelWarningSetting}}>取消</paper-button>
+                    <paper-button affirmative autofocus on-click={{onConfirmWarningSetting}}>确定</paper-button>
+                </paper-action-dialog>
             </div>
         </template>
     </template>
@@ -198,6 +254,10 @@ Proprietary and confidential
         created: function() {
             this.height = 10;
             //TODO(xiang): fetch current tank data from server.
+            this.data = {};
+            this.data.oil_waning_level = 1;
+            this.data.water_warning_level = 0.5;
+            this.data.temperature_warning = 38;
         },
         ready: function() {},
         publish: {
@@ -217,25 +277,44 @@ Proprietary and confidential
             });
         },
         onChooseCategory: function() {},
+        onTankSetting: function() {
+            this.$.tank_setting_dialog.toggle();
+        },
+        onWarningSetting: function() {
+            this.$.warning_setting_dialog.toggle();
+        },
+        onConfirmWarningSetting: function() {
+            if (this.$.water_warning_setting.value)
+                this.data.water_warning_level = Number(this.$.water_warning_setting.value);
+            if (this.$.oil_warning_setting.value)
+                this.data.oil_warning_level = Number(this.$.oil_warning_setting.value);
+            if (this.$.temp_warning_setting.value)
+                this.data.temperature_warning = Number(this.$.temp_warning_setting.value);
+            this.updateData(this.tank_id - 1);
+        },
+        onCancelWarningSetting: function() {
+            this.$.water_warning_setting.value = undefined;
+            this.$.oil_warning_setting.value = undefined;
+            this.$.temp_warning_setting.value = undefined;
+        },
         tank_idChanged: function(old_id, new_id) {
             var idx = new_id - 1;
             this.updateData(idx);
         },
         updateData: function(idx) {
-            this.data = {
-                oil_level_low: mock_data[idx][0],
-                oil_level_high: mock_data[idx][1],
-                water_level: mock_data[idx][2],
-                temperature: mock_data[idx][3],
-                oil_volume: mock_data[idx][4],
-                oil_density: mock_data[idx][5],
-                oil_weight: Math.floor(mock_data[idx][4] * mock_data[idx][5]),
-            };
+            this.data.oil_level_low = mock_data[idx][0];
+            this.data.oil_level_high = mock_data[idx][1];
+            this.data.water_level = mock_data[idx][2];
+            this.data.temperature = mock_data[idx][3];
+            this.data.oil_volume = mock_data[idx][4];
+            this.data.oil_density = mock_data[idx][5];
+            this.data.oil_weight = Math.floor(mock_data[idx][4] * mock_data[idx][5]);
+
             if (!this.$.oil_level || !this.$.water_level || !this.$.temp)
                 return;
 
             // FIXME(xiang): hard code the oil waring threshold
-            if (this.data.oil_level_low < 1) {
+            if (this.data.oil_level_low < this.data.oil_warning_level) {
                 this.$.oil_level.disabled = false;
                 this.$.oil_level.checked = true;
             } else {
@@ -243,7 +322,7 @@ Proprietary and confidential
                 this.$.oil_level.disabled = true;
             }
 
-            if (this.data.water_level < 0.5) {
+            if (this.data.water_level < this.data.water_warning_level) {
                 this.$.water_level.disabled = false;
                 this.$.water_level.checked = true;
             } else {
@@ -251,7 +330,7 @@ Proprietary and confidential
                 this.$.water_level.disabled = true;
             }
 
-            if (this.data.temperature > 38) {
+            if (this.data.temperature > this.data.temperature_warning) {
                 this.$.temp.disabled = false;
                 this.$.temp.checked = true;
             } else {
