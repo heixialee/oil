@@ -54,6 +54,9 @@ Proprietary and confidential
                 font-size: 24px;
                 font: bold;
             }
+            .name > span {
+                font-size: 16px;
+            }
             core-item {
                 border-bottom: 1px solid #bdbdbd;
             }
@@ -65,7 +68,7 @@ Proprietary and confidential
             <div class='oil-tank' horizontal layout>
                 <oil-image type="small" on-click={{onChoose}} curr={{data.oil_level_high/height}}></oil-image>
                 <div vertical layout>
-                    <div class='name'>#{{tank_id}}号罐</div>
+                    <div class='name'>#{{tank_id}}号罐 <span>{{data.oil_type}}</span></div>
                     <core-item src="images/oil_low.png" label="油面低位: ">
                         <data>{{data.oil_level_low}} m</data>
                     </core-item>
@@ -134,8 +137,13 @@ Proprietary and confidential
             paper-radio-button::shadow #onRadio {
                 background-color: #F44336;
             }
+            .oil_type {
+                margin-top: -60px;
+                margin-left: 190px;
+                font-size: 16px;
+            }
             .settings {
-                margin-top: -40px;
+                margin-top: 15px;
                 margin-left: 20px;
                 width: 400px;
             }
@@ -208,6 +216,7 @@ Proprietary and confidential
                     </div>
                 </div>
             </div>
+            <div class="oil_type"><b>{{data.oil_type}}</b></div>
             <div layout horizontal class="settings">
                 <paper-button raised flex on-click="{{onTankSetting}}">油 罐 设 置</paper-button>
                 <paper-action-dialog id="tank_setting_dialog" backdrop autoCloseDisabled layered="false">
@@ -242,13 +251,19 @@ Proprietary and confidential
         </template>
     </template>
     <script>
+    var oil_types = [
+        '90号汽油',
+        '93号汽油',
+        '10号柴油',
+        '航天汽油'
+    ];
     var mock_data = [
-        [2.3, 8.5, 1.6, 39.9, 423.5, 810],
-        [1.8, 3.7, 1.2, 22.8, 178.6, 812],
-        [0.7, 1.2, 0.2, 19.2, 69.5, 822],
-        [3.5, 6.9, 3.2, 38.3, 330.5, 812],
-        [2.2, 4.5, 2.4, 24.9, 270.5, 811],
-        [2.3, 8.5, 1.6, 20.9, 423.5, 810],
+        [0, 2.3, 8.5, 1.6, 39.9, 423.5, 810],
+        [1, 1.8, 3.7, 1.2, 22.8, 178.6, 812],
+        [0, 0.7, 1.2, 0.2, 19.2, 69.5, 822],
+        [3, 3.5, 6.9, 3.2, 38.3, 330.5, 812],
+        [2, 2.2, 4.5, 2.4, 24.9, 270.5, 811],
+        [2, 2.3, 8.5, 1.6, 20.9, 423.5, 810],
     ];
     Polymer({
         created: function() {
@@ -302,13 +317,15 @@ Proprietary and confidential
             this.updateData(idx);
         },
         updateData: function(idx) {
-            this.data.oil_level_low = mock_data[idx][0];
-            this.data.oil_level_high = mock_data[idx][1];
-            this.data.water_level = mock_data[idx][2];
-            this.data.temperature = mock_data[idx][3];
-            this.data.oil_volume = mock_data[idx][4];
-            this.data.oil_density = mock_data[idx][5];
-            this.data.oil_weight = Math.floor(mock_data[idx][4] * mock_data[idx][5]);
+            var i = 0;
+            this.data.oil_type = oil_types[mock_data[idx][i++]];
+            this.data.oil_level_low = mock_data[idx][i++];
+            this.data.oil_level_high = mock_data[idx][i++];
+            this.data.water_level = mock_data[idx][i++];
+            this.data.temperature = mock_data[idx][i++];
+            this.data.oil_volume = mock_data[idx][i++];
+            this.data.oil_density = mock_data[idx][i++];
+            this.data.oil_weight = Math.floor(mock_data[idx][5] * mock_data[idx][6]);
 
             if (!this.$.oil_level || !this.$.water_level || !this.$.temp)
                 return;
