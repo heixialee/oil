@@ -241,15 +241,21 @@ Proprietary and confidential
                 <paper-button raised flex on-click="{{onTankSetting}}">油 罐 设 置</paper-button>
                 <paper-action-dialog id="tank_setting_dialog" backdrop autoCloseDisabled layered="false">
                     <div layout vertical>
-                        <div>油桶高度:
-                            <paper-input label="  水位(m)"></paper-input>
+                        <div layout horizontal>
+                            <core-item label="油桶高度:">
+                            </core-item>
+                            <paper-slider id="tank_height_setting" value="1" max="50" editable></paper-slider>
+                            <core-item class="dialog" label=" 高度(m)">
                         </div>
-                        <div>油桶半径：
-                            <paper-input label="  油位(m)"></paper-input>
+                        <div layout horizontal>
+                            <core-item label="油桶半径:">
+                            </core-item>
+                            <paper-slider id="tank_radius_setting" value="1" max="50" editable></paper-slider>
+                            <core-item class="dialog" label=" 半径(m)">
                         </div>
                     </div>
                     <paper-button dismissive>取消</paper-button>
-                    <paper-button affirmative autofocus>确定</paper-button>
+                    <paper-button affirmative autofocus on-click={{onConfirmTankSetting}}>确定</paper-button>
                 </paper-action-dialog>
                 <paper-button raised flex on-click="{{onWarningSetting}}">预 警 设 置</paper-button>
                 <paper-action-dialog id="warning_setting_dialog" backdrop autoCloseDisabled layered="false">
@@ -304,6 +310,8 @@ Proprietary and confidential
             this.data.oil_waning_level = 1;
             this.data.water_warning_level = 0.5;
             this.data.temperature_warning = 38;
+            this.data.tank_height=10;
+            this.data.tank_radius=10;
         },
         ready: function() {},
         publish: {
@@ -325,6 +333,14 @@ Proprietary and confidential
         onChooseCategory: function() {},
         onTankSetting: function() {
             this.$.tank_setting_dialog.toggle();
+        },
+        onConfirmTankSetting: function() {
+            if (this.$.tank_height_setting.value)
+                this.data.tank_height = Number(this.$.tank_height_setting.value);
+             if (this.$.tank_radius_setting.value)
+                this.data.tank_radius = Number(this.$.tank_radius_setting.value);
+            console.log("tank_height: %d", this.data.tank_height);
+            console.log("tank_radius:%d", this.data.tank_radius);
         },
         onWarningSetting: function() {
             this.$.warning_setting_dialog.toggle();
