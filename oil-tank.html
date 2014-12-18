@@ -70,7 +70,8 @@ Proprietary and confidential
             <div class='oil-tank' horizontal layout>
                 <oil-image type="small" on-click={{onChoose}} curr={{data.oil_level_high/height}}></oil-image>
                 <div vertical layout>
-                    <div class='name'>#{{tank_id}}号罐 <span>{{data.oil_type}}</span></div>
+                    <div class='name'>#{{tank_id}}号罐 <span>{{data.oil_type}}</span>
+                    </div>
                     <core-item src="images/oil_low.png" label="油面低位: ">
                         <data>{{data.oil_level_low}} m</data>
                     </core-item>
@@ -107,25 +108,26 @@ Proprietary and confidential
                 margin: 0px 0px 0px 0px;
             }
             oil-image {
-                margin: 30px 0px 0px 10px;
+                margin: 40px 0px 0px 40px;
             }
             core-item {
                 margin-bottom: 20px;
-                margin-top:20px;
+                margin-top: 0px;
                 margin-right: 20px;
                 height: 40px;
             }
             data {
                 margin-left: 10px;
-                margin-top: 10px;
+                margin-top: 0px;
                 background-color: #FFFFFF;
                 border-bottom: 1px solid #bdbdbd;
                 border: 2px solid;
-                width: 200px;
-                height: 40px;
-                font-size: 32px;
+                width: 120px;
+                height: 24px;
+                font-size: 20px;
             }
             .desc {
+                margin-top: 30px;
                 margin-left: 20px;
             }
             .indicator {
@@ -151,19 +153,19 @@ Proprietary and confidential
             paper-radio-button::shadow #onRadio {
                 background-color: #F44336;
             }
-            paper-slider{
+            paper-slider {
                 margin-bottom: 20px;
                 margin-top: 20px;
                 margin-left: 20px;
                 width: 100%;
             }
             .oil_type {
-                margin-top: -60px;
+                margin-top: -100px;
                 margin-left: 190px;
                 font-size: 16px;
             }
             .settings {
-                margin-top: 15px;
+                margin-top: 40px;
                 margin-left: 20px;
                 width: 400px;
             }
@@ -236,7 +238,8 @@ Proprietary and confidential
                     </div>
                 </div>
             </div>
-            <div class="oil_type"><b>{{data.oil_type}}</b></div>
+            <div class="oil_type"><b>{{data.oil_type}}</b>
+            </div>
             <div layout horizontal class="settings">
                 <paper-button raised flex on-click="{{onTankSetting}}">油 罐 设 置</paper-button>
                 <paper-action-dialog id="tank_setting_dialog" backdrop autoCloseDisabled layered="false">
@@ -266,7 +269,7 @@ Proprietary and confidential
                             <paper-slider id="water_warning_setting" value="1" max="5" editable></paper-slider>
                             <core-item class="dialog" label=" 水位(m)">
                         </div>
-                       
+
                         <div layout horizontal>
                             <core-item src="images/water.png" label="油位警报">
                             </core-item>
@@ -310,8 +313,8 @@ Proprietary and confidential
             this.data.oil_waning_level = 1;
             this.data.water_warning_level = 0.5;
             this.data.temperature_warning = 38;
-            this.data.tank_height=10;
-            this.data.tank_radius=10;
+            this.data.tank_height = 10;
+            this.data.tank_radius = 10;
         },
         ready: function() {},
         publish: {
@@ -337,7 +340,7 @@ Proprietary and confidential
         onConfirmTankSetting: function() {
             if (this.$.tank_height_setting.value)
                 this.data.tank_height = Number(this.$.tank_height_setting.value);
-             if (this.$.tank_radius_setting.value)
+            if (this.$.tank_radius_setting.value)
                 this.data.tank_radius = Number(this.$.tank_radius_setting.value);
             console.log("tank_height: %d", this.data.tank_height);
             console.log("tank_radius:%d", this.data.tank_radius);
