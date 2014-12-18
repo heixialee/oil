@@ -110,7 +110,7 @@ Proprietary and confidential
             oil-image {
                 margin: 40px 0px 0px 40px;
             }
-            core-item {
+            .desc > core-item {
                 margin-bottom: 20px;
                 margin-top: 0px;
                 margin-right: 20px;
@@ -248,13 +248,13 @@ Proprietary and confidential
                             <core-item label="油桶高度:">
                             </core-item>
                             <paper-slider id="tank_height_setting" value="1" max="50" editable></paper-slider>
-                            <core-item class="dialog" label=" 高度(m)">
+                            <core-item class="dialog" label=" 高度(m)"></core-item>
                         </div>
                         <div layout horizontal>
                             <core-item label="油桶半径:">
                             </core-item>
                             <paper-slider id="tank_radius_setting" value="1" max="50" editable></paper-slider>
-                            <core-item class="dialog" label=" 半径(m)">
+                            <core-item class="dialog" label=" 半径(m)"></core-item>
                         </div>
                     </div>
                     <paper-button dismissive>取消</paper-button>
@@ -264,24 +264,24 @@ Proprietary and confidential
                 <paper-action-dialog id="warning_setting_dialog" backdrop autoCloseDisabled layered="false">
                     <div layout vertical>
                         <div layout horizontal>
-                            <core-item src="images/water.png" label="水位警报">
+                            <core-item label="水位警报">
                             </core-item>
                             <paper-slider id="water_warning_setting" value="1" max="5" editable></paper-slider>
-                            <core-item class="dialog" label=" 水位(m)">
+                            <core-item class="dialog" label=" 水位(m)"></core-item>
                         </div>
 
                         <div layout horizontal>
-                            <core-item src="images/water.png" label="油位警报">
+                            <core-item label="油位警报">
                             </core-item>
                             <paper-slider id="oil_warning_setting" value="3" max="20" editable></paper-slider>
-                            <core-item class="dialog" label=" 油位(m)">
+                            <core-item class="dialog" label=" 油位(m)"></core-item>
                         </div>
 
                         <div layout horizontal>
-                            <core-item src="images/water.png" label="温度警报">
+                            <core-item label="温度警报">
                             </core-item>
                             <paper-slider id="temp_warning_setting" value="10" max="60" editable></paper-slider>
-                            <core-item class="dialog" label="  温度(°C)">
+                            <core-item class="dialog" label="  温度(°C)"></core-item>
                         </div>
                     </div>
                     <paper-button dismissive on-click={{onCancelWarningSetting}}>取消</paper-button>
