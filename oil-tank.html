@@ -416,3 +416,65 @@ Proprietary and confidential
     });
     </script>
 </polymer-element>
+
+
+<polymer-element name="bottom-menu">
+    <template>
+        <style>
+        core-item{
+            margin-left: 20px;
+        }
+        core-menu {
+            background-color: #C0C0C0;
+            position: absolute;
+            bottom: 0px;
+            right: 0px;
+            left: 0px;
+            border: 1px solid;
+            }
+        #show {
+            background-color: #FFFAF0;
+            margin-left: 10px;
+        }
+        paper-button{
+            margin-top: 10px;
+            margin-left: 10px;
+            margin-bottom:10px;
+            border:1px solid;
+            width:100px;
+        }
+        data {
+                margin-left: 5px;
+                border: 1px solid;
+                width: 120px;
+                height: 30px;
+                font-size: 20;
+                background-color: #FFFFFF;
+                text-align: center;
+            }
+        </style>
+        <core-menu>    
+            <core-item label="注册用户">
+                <data>{{username}}</data>
+            </core-item>
+            <core-item label="注册时间">
+                <data>{{reg_time}}</data>
+            </core-item>
+            <core-item label="注册班组">
+                <data>{{group}}</data>
+            </core-item>
+
+            <div horizontal layout>
+                <paper-button on-click="{{onTankSetting}}">用户注册</paper-button>
+                <paper-button on-click="{{onTankSetting}}">修改密码</paper-button>
+            </div>
+            <div horizontal layout>
+                <paper-button on-click="{{onTankSetting}}">关   于</paper-button>
+                <paper-button on-click="{{onTankSetting}}">退   出</paper-button>
+            </div>
+        </core-menu>
+    </template>
+    <script>
+    Polymer({});
+    </script>
+</polymer-element>
