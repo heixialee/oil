@@ -4,7 +4,7 @@
   "main": "index.html",
     "window": {
     "toolbar": false,
-    "frame": false,
-	"fullscreen": true
+    "frame": true,
+    "resizable": false
 	}
 }
