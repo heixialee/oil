@@ -54,6 +54,18 @@ TODO(xiang): make a base element shared by user-page & admin-page
             color: currentcolor;
             margin-left: 5px;
         }
+        #about {
+            font-size: 14px;
+            position: absolute;
+            bottom: 10px;
+            right: 0px;
+            left: 0px;
+            width: 120px;
+            height: 40px;
+        }
+        #about_dialog {
+            width: 400px;
+        }
         </style>
         <core-scaffold>
             <nav>
@@ -68,6 +80,13 @@ TODO(xiang): make a base element shared by user-page & admin-page
                     </template>
                 </core-menu>
                 <account-info data={{account_info}}></account-info>
+                <paper-button id="about" raised on-click="{{onAboutClick}}">关于本软件</paper-button>
+                <paper-action-dialog id="about_dialog" layered="false">
+                    <p align="center"><b>欢迎使用油罐监控软件</b></p>
+                    <p align="center"><b>上海骏越工贸有限公司</b></p>
+                    <p align="center"><b>版本: v0.01</b></p>
+                    <paper-button align="center" raised affirmative>关 闭</paper-button>
+                </paper-action-dialog>
             </nav>
 
             <core-toolbar tool flex>
@@ -126,6 +145,9 @@ TODO(xiang): make a base element shared by user-page & admin-page
         },
         onClick: function() {
             this.fire("logout");
+        },
+        onAboutClick: function() {
+            this.$.about_dialog.toggle();
         }
     });
     </script>
