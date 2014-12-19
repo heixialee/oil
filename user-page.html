@@ -14,25 +14,8 @@ Proprietary and confidential
 <link rel="import" href="./bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="./bower_components/paper-radio-button/paper-radio-button.html">
 
-<link rel="import" href="./oil-tank.html">
+<link rel="import" href="./oil-tanks-info.html">
 <link rel="import" href="./account-setting.html">
-
-<polymer-element name="user-summary">
-    <template>
-        <style>
-        </style>
-        <div horizontal layout wrap>
-            <oil-tank type="outline" tank_id="1"></oil-tank>
-            <oil-tank type="outline" tank_id="2"></oil-tank>
-            <oil-tank type="outline" tank_id="3"></oil-tank>
-            <oil-tank type="outline" tank_id="4"></oil-tank>
-            <oil-tank type="outline" tank_id="5"></oil-tank>
-        </div>
-    </template>
-    <script>
-    Polymer({});
-    </script>
-</polymer-element>
 
 <!--
 TODO(xiang): make a base element shared by user-page & admin-page
@@ -98,8 +81,8 @@ TODO(xiang): make a base element shared by user-page & admin-page
                 FIXME(xiang): can we use template to create different custom elements?
                 -->
                 <core-animated-pages id="pages" valueattr="type" selected="{{route}}">
-                    <section type="user-summary">
-                        <user-summary></user-summary>
+                    <section type="oil-tanks-info">
+                        <oil-tanks-info></oil-tanks-info>
                     </section>
                     <section type="user-log">
                         <user-log></user-log>
@@ -122,10 +105,10 @@ TODO(xiang): make a base element shared by user-page & admin-page
                 login: '2014年12月20日22点',
                 last_login: '2014年12月19日9点',
             };
-            this.route = "user-summary";
+            this.route = "oil-tanks-info";
             this.sections = [{
                 name: '概况汇总',
-                type: 'user-summary'
+                type: 'oil-tanks-info'
             }, {
                 name: '用户记录',
                 type: 'user-log'
