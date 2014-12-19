@@ -1,0 +1,79 @@
+<!--
+Copyright (c) 2014 Long Xiang (seanlong@outlook.com). All rights reserved.
+Unauthorized copying of this file, via any medium is strictly prohibited
+Proprietary and confidential
+-->
+
+<link rel="import" href="./bower_components/core-dropdown-menu/core-dropdown-menu.html">
+<link rel="import" href="./bower_components/core-dropdown/core-dropdown.html">
+<link rel="import" href="./bower_components/core-menu/core-menu.html">
+<link rel="import" href="./bower_components/core-item/core-item.html">
+<link rel="import" href="./bower_components/paper-input/paper-input.html">
+
+<link rel="import" href="./oil-tank.html">
+
+<polymer-element name="oil-tanks-info">
+    <template>
+        <style>
+        .search {
+            padding-top: 10px;
+            padding-left: 60px;
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+            background: #1E88E5;
+        }
+        .search > .title {
+            font-size: 24px;
+            margin-top: 10px;
+            margin-right: 20px;
+            color: #ffffff;
+        }
+        core-dropdown-menu {
+            background: #1E88E5;
+            color: #ffffff;
+        }
+        .dropdown {
+            border: 1px solid #1E88E5;
+            background: #1E88E5;
+            background-color: #1E88E5;
+            color: #ffffff;
+        }
+        paper-input {
+            color: #ffffff;
+        }
+        </style>
+        <div class="search" layout horizontal>
+            <div class='title'>油罐查询</div>
+            <core-dropdown-menu label="选择查询方式">
+                <core-dropdown class="dropdown">
+                    <core-menu>
+                        <template repeat="{{data}}">
+                            <core-item>{{}}</core-item>
+                        </template>
+                    </core-menu>
+                </core-dropdown>
+            </core-dropdown-menu>
+            <paper-input label="用户输入"></paper-input>
+        </div>
+        <div horizontal layout wrap>
+            <oil-tank type="outline" tank_id="1"></oil-tank>
+            <oil-tank type="outline" tank_id="2"></oil-tank>
+            <oil-tank type="outline" tank_id="3"></oil-tank>
+            <oil-tank type="outline" tank_id="4"></oil-tank>
+            <oil-tank type="outline" tank_id="5"></oil-tank>
+        </div>
+    </template>
+    <script>
+    Polymer({
+        ready: function() {
+            this.data = [
+                '按罐号查询',
+                '按油品类别查询',
+                '按油罐名称查询',
+                '按警报记录查询',
+                '按警报类型查询',
+            ];
+        }
+    });
+    </script>
+</polymer-element>
