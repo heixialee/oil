@@ -1,0 +1,108 @@
+<!--
+Copyright (c) 2014 Long Xiang (seanlong@outlook.com). All rights reserved.
+Unauthorized copying of this file, via any medium is strictly prohibited
+Proprietary and confidential
+-->
+
+<polymer-element name="account-info" attributes="data">
+    <template>
+        <style>
+        :host {
+            font-size: 14px;
+            position: absolute;
+            bottom: 20px;
+            right: 0px;
+            left: 0px;
+        }
+        </style>
+        <div>用户名：<b>{{data.name}}</b>
+        </div>
+        <div>登录时间：{{data.login}}</div>
+    </template>
+    <script>
+    Polymer({
+        ready: function() {
+            this.data = {};
+        }
+    });
+    </script>
+</polymer-element>
+
+<polymer-element name="account-setting" attributes="data">
+    <template>
+        <style>
+        .basic_info {
+            padding-left: 90px;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: dashed 1px;
+        }
+        .category {
+            margin-left: -50px;
+            font-size: 24px;
+            color: #00695C;
+        }
+        .security {
+            margin-top: 20px;
+            margin-left: 90px;
+        }
+        [dismissive] {
+            background: #BDBDBD;
+            color: #000;
+        }
+        [affirmative] {
+            background: #4caf50;
+            color: #fff;
+        }
+        paper-button {
+            display: block;
+            margin-left: 90px;
+            margin-top: 20px;
+            width: 160px;
+        }
+        </style>
+        <div class="basic_info">
+            <core-item icon="account-box" label="基本信息" class="font-scalable category"></core-item>
+            <core-item label="用户名："><b>{{data.name}}</b>
+            </core-item>
+            <core-item label="用户班组："><b>{{data.group}}</b>
+            </core-item>
+            <core-item label="注册时间：">{{data.reg_time}}</core-item>
+            <core-item label="登录时间：">{{data.login}}</core-item>
+            <core-item label="上次登录时间：">{{data.last_login}}</core-item>
+        </div>
+        <div class="security">
+            <core-item icon="verified-user" label="账户安全" class="font-scalable category"></core-item>
+        </div>
+        <paper-button raised on-click="{{onPasswdChange}}">修改密码</paper-button>
+        <paper-button raised>设定自动登录</paper-button>
+        <paper-action-dialog id="passwd_change" layered="false">
+            <div layout vertical align="center">
+                <core-label>老密码
+                    <paper-input></paper-input>
+                </core-label>
+                <core-label>新密码
+                    <paper-input></paper-input>
+                </core-label>
+                <core-label>新密码
+                    <paper-input></paper-input>
+                </core-label>
+            </div>
+            <paper-button raised dismissive>取消</paper-button>
+            <paper-button raised affirmative autofocus on-click={{onPasswdChange}}>确定</paper-button>
+        </paper-action-dialog>
+    </template>
+    <script>
+    Polymer({
+        ready: function() {
+            this.data = {};
+        },
+        onPasswdChange: function() {
+            this.$.passwd_change.toggle();
+        },
+        onConfirmPasswordChange: function() {
+            console.log("onConfirmPasswordChange called");
+        }
+    });
+    </script>
+</polymer-element>
