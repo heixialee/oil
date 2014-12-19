@@ -451,7 +451,28 @@ Proprietary and confidential
                 font-size: 20;
                 background-color: #FFFFFF;
                 text-align: center;
-            }
+        }
+        [dismissive] {
+                background: #BDBDBD;
+                color: #000;
+        }
+        [affirmative] {
+                background: #4caf50;
+                color: #fff;
+        }
+        paper-action-dialog {
+            border: 2px solid;
+            width: 500px;
+            background-color: #C0C0C0; 
+        }
+        paper-input {
+            margin-top: 10px;
+        }
+        core-label{
+            margin-top: 10px;
+            margin-right: 20px;
+
+        }
         </style>
         <core-menu>    
             <core-item label="注册用户">
@@ -465,16 +486,60 @@ Proprietary and confidential
             </core-item>
 
             <div horizontal layout>
-                <paper-button on-click="{{onTankSetting}}">用户注册</paper-button>
-                <paper-button on-click="{{onTankSetting}}">修改密码</paper-button>
+                <paper-button raised flex on-click="{{onUserRegister}}">用户注册</paper-button>
+                <paper-action-dialog id="user_register" layered="false">
+                    <div layout vertical align="center">
+                    <core-label>用户名
+                        <paper-input></paper-input>
+                    </core-label>
+                    <core-label>密 码
+                        <paper-input></paper-input>
+                    </core-label>
+                    <core-label>密 码
+                        <paper-input></paper-input>
+                    </core-label>
+                    </div>
+                    <paper-button raised dismissive>取消</paper-button>
+                    <paper-button raised affirmative autofocus on-click={{onConfirmUserRegister}}>注册</paper-button>
+                </paper-action-dialog>
+
+                <paper-button raised on-click="{{onPasswdChange}}">修改密码</paper-button>
+                <paper-action-dialog id="passwd_change" layered="false">
+                    <div layout vertical align="center">
+                    <core-label>老密码
+                        <paper-input></paper-input>
+                    </core-label>
+                    <core-label>新密码
+                        <paper-input></paper-input>
+                    </core-label>
+                    <core-label>新密码
+                        <paper-input></paper-input>
+                    </core-label>
+                    </div>
+                    <paper-button raised dismissive>取消</paper-button>
+                    <paper-button raised affirmative autofocus on-click={{onPasswdChange}}>确定</paper-button>
+                </paper-action-dialog>
             </div>
             <div horizontal layout>
-                <paper-button on-click="{{onTankSetting}}">关   于</paper-button>
-                <paper-button on-click="{{onTankSetting}}">退   出</paper-button>
+                <paper-button raised on-click="{{onTankSetting}}">关   于</paper-button>
+                <paper-button raised on-click="{{onTankSetting}}">退   出</paper-button>
             </div>
         </core-menu>
     </template>
     <script>
-    Polymer({});
+    Polymer({
+        onUserRegister: function() {
+            this.$.user_register.toggle();
+        },
+        onPasswdChange: function() {
+            this.$.passwd_change.toggle();
+        },
+        onConfirmUserRegister: function() {
+            console.log("onConfirmUserRegister called");
+        },
+        onConfirmPasswordChange: function() {
+            console.log("onConfirmPasswordChange called");
+        }
+    });
     </script>
 </polymer-element>
