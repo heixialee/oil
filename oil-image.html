@@ -37,7 +37,6 @@ Proprietary and confidential
             if (this.group)
                 this.group.remove();
             var curr_oil_level = this.data.oil_level_high / this.data.tank_height;
-            console.log(curr_oil_level);
             var curr_water_level = this.data.water_level / this.data.tank_height;
             var center_x = left + radius[0];
             var right = left + radius[0] * 2;
@@ -67,7 +66,7 @@ Proprietary and confidential
                         stops: ['white', 'black']
                     },
                     origin: [left + 4, top + 2],
-                    destination: [left + 4, bottom - height * curr_oil_level]
+                    destination: [left + 4, bottom - height * curr_water_level]
                 },
                 strokeColor: 'black'
             });
@@ -171,6 +170,31 @@ Proprietary and confidential
                 }
             }
 
+            if (curr_water_level > 0 && curr_water_level <= 1 && curr_water_level > curr_oil_level) {
+                water_level = new paper.Path.Rectangle({
+                    rectangle: {
+                        topLeft: [left + 4, bottom - height * curr_water_level],
+                        bottomRight: [right - 4, bottom - height * curr_oil_level]
+                    },
+                    fillColor: '#80D8FF',
+                });
+                if (this.type == 'large') {
+                    water_buoy = new paper.Path.Circle({
+                        center: [right - 35 - 2, bottom - height * curr_water_level],
+                        radius: 7,
+                        strokeColor: 'black',
+                        fillColor: 'white'
+                    });
+                } else if (this.type == 'small') {
+                    water_buoy = new paper.Path.Circle({
+                        center: [right - 24 - 2, bottom - height * curr_water_level],
+                        radius: 5,
+                        strokeColor: 'black',
+                        fillColor: 'white'
+                    });
+                }
+            }
+
             var group = new paper.Group();
             this.group = group;
             group.insertChild(0, border_rect);
@@ -185,8 +209,10 @@ Proprietary and confidential
                 group.insertChild(4, oil_level);
                 group.insertChild(8, oil_buoy);
             }
-            if (water_level)
+            if (water_level){
                 group.insertChild(4, water_level);
+                group.insertChild(8, water_buoy);
+            }
             paper.view.draw();
         },
         drawSmall: function() {
