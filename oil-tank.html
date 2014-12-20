@@ -41,7 +41,7 @@ Proprietary and confidential
     </script>
 </polymer-element>
 
-<polymer-element name="oil-tank">
+<polymer-element name="oil-tank" attributes="data">
     <template>
         <template if="{{tank_id > 0 && type == 'outline'}}">
             <style>
@@ -72,7 +72,7 @@ Proprietary and confidential
             }
             </style>
             <div class='oil-tank' horizontal layout>
-                <oil-image type="small" on-click={{onChoose}} curr={{data.oil_level_high/height}}></oil-image>
+                <oil-image id="image" type="small" data="{{data}}" on-click="{{onChoose}}"></oil-image>
                 <div vertical layout>
                     <div class='name'>#{{tank_id}}号罐 <span>{{data.oil_type}}</span>
                     </div>
@@ -191,7 +191,7 @@ Proprietary and confidential
             }
             </style>
             <div class='oil-tank' horizontal layout>
-                <oil-image type="large" curr={{data.oil_level_high/height}}></oil-image>
+                <oil-image id="image" type="large" data="{{data}}"></oil-image>
                 <div class='desc' vertical layout>
                     <core-item src="images/oil_low.png" label="油面低位: " on-click="{{onChooseCategory}}">
                         <data>{{data.oil_level_low}} m</data>
@@ -311,7 +311,6 @@ Proprietary and confidential
     ];
     Polymer({
         created: function() {
-            this.height = 10;
             //TODO(xiang): fetch current tank data from server.
             this.data = {};
             this.data.oil_waning_level = 1;
@@ -320,7 +319,9 @@ Proprietary and confidential
             this.data.tank_height = 10;
             this.data.tank_radius = 10;
         },
-        ready: function() {},
+        ready: function() {
+
+        },
         publish: {
             tank_id: -1,
             type: "outline",
@@ -372,9 +373,11 @@ Proprietary and confidential
         tank_idChanged: function(old_id, new_id) {
             var idx = new_id - 1;
             this.updateData(idx);
+            this.$.image.dataChanged();
         },
         updateData: function(idx) {
             var i = 0;
+            this.data.tank_id = this.tank_id;
             this.data.oil_type = oil_types[mock_data[idx][i++]];
             this.data.oil_level_low = mock_data[idx][i++];
             this.data.oil_level_high = mock_data[idx][i++];
@@ -411,7 +414,6 @@ Proprietary and confidential
                 this.$.temp.checked = false;
                 this.$.temp.disabled = true;
             }
-
         }
     });
     </script>

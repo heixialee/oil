@@ -6,7 +6,7 @@ Proprietary and confidential
 
 <script type="text/javascript" src="./bower_components/paper.js/paper-full.min.js"></script>
 
-<polymer-element name='oil-image'>
+<polymer-element name='oil-image' attributes="data">
     <template>
         <style>
         </style>
@@ -16,6 +16,9 @@ Proprietary and confidential
     var fillColor = '#90A4AE';
     var strokeColor = '#424242';
     Polymer({
+        created: function() {
+            this.data = {};
+        },
         attached: function() {
             var canvas = this.$.oil_tank;
             if (this.type == "small") {
@@ -29,86 +32,168 @@ Proprietary and confidential
             this.items = [];
             this.draw();
         },
-        // FIXME(xiang): currently this's a tricky way to draw the color.
         drawInternal: function(top, left, radius, height) {
-            function drawDecorator() {
-                var step = height / 5;
-                var w = 10;
-                var path = new paper.Path.Line({
-                    from: [left - w, top],
-                    to: [left - w, top + height],
-                    strokeWidth: 3,
-                    strokeColor: strokeColor
-                });
-                for (var i = 0; i < 6; i++) {
-                    var path = new paper.Path.Line({
-                        from: [left - w, top + i * step],
-                        to: [left, top + i * step],
-                        strokeWidth: 3,
-                        strokeColor: strokeColor
-                    });
-                }
-            }
-            drawDecorator();
-
-            this.items.forEach(function(i) {
-                i.remove();
-            });
-            this.items = [];
-            center_x = left + radius[0];
-            right = left + radius[0] * 2;
-            var bottom_ellipse = new paper.Path.Ellipse({
-                center: [center_x, top + height],
-                radius: radius,
-                strokeColor: strokeColor,
-                strokeWidth: 5
-            });
-            if (this.curr > 0 && this.curr <= 1) {
-                var rect = new paper.Shape.Rectangle({
-                    topLeft: [left, top + (1 - this.curr) * height],
-                    bottomRight: [right, top + height],
-                    fillColor: fillColor
-                });
-                var e1 = new paper.Shape.Ellipse({
-                    center: [center_x, top + height],
-                    radius: radius,
-                    fillColor: fillColor
-                });
-                var e2 = new paper.Shape.Ellipse({
-                    center: [center_x, top + (1 - this.curr) * height],
-                    radius: radius,
-                    strokeColor: strokeColor,
-                    fillColor: fillColor
-                });
-                this.items.push(rect, e1, e2);
-            }
+            //TODO make sure this is called necessarily.
+            if (this.group)
+                this.group.remove();
+            var curr_oil_level = this.data.oil_level_high / this.data.tank_height;
+            console.log(curr_oil_level);
+            var curr_water_level = this.data.water_level / this.data.tank_height;
+            var center_x = left + radius[0];
+            var right = left + radius[0] * 2;
+            var bottom = top + height;
+            // draw tank and background
             var top_ellipse = new paper.Path.Ellipse({
                 center: [center_x, top],
                 radius: radius,
-                strokeColor: strokeColor,
-                strokeWidth: 4
+                strokeColor: 'black',
+                fillColor: 'white'
             });
+            var border_rect = new paper.Path.Rectangle({
+                rectangle: {
+                    topLeft: [left, top],
+                    bottomRight: [right, bottom]
+                },
+                strokeColor: 'black',
+                fillColor: 'white',
+            });
+            var fill_rect = new paper.Path.Rectangle({
+                rectangle: {
+                    topLeft: [left + 4, top + 2],
+                    bottomRight: [right - 4, bottom - 3]
+                },
+                fillColor: {
+                    gradient: {
+                        stops: ['white', 'black']
+                    },
+                    origin: [left + 4, top + 2],
+                    destination: [left + 4, bottom - height * curr_oil_level]
+                },
+                strokeColor: 'black'
+            });
+            var mask_rect = new paper.Path.Rectangle({
+                rectangle: {
+                    topLeft: [left + 1, top],
+                    bottomRight: [right - 1, bottom]
+                },
+                fillColor: 'white',
+            });
+            // draw pillar
+            var pillar, pillar_top;
+            if (this.type == 'large') {
+                pillar = new paper.Path.Rectangle({
+                    rectangle: {
+                        topLeft: [right - 35, 30],
+                        bottomRight: [right - 39, bottom]
+                    },
+                    strokeColor: 'black',
+                    fillColor: 'white'
+                });
+                pillar_top = new paper.Path.Circle({
+                    center: [right - 35 - 2, 30],
+                    radius: 7,
+                    strokeColor: 'black',
+                    fillColor: 'white'
+                });
+            } else if (this.type == 'small') {
+                pillar = new paper.Path.Rectangle({
+                    rectangle: {
+                        topLeft: [right - 24, 16],
+                        bottomRight: [right - 28, bottom]
+                    },
+                    strokeColor: 'black',
+                    fillColor: 'white'
+                });
+                pillar_top = new paper.Path.Circle({
+                    center: [right - 24 - 2, 16],
+                    radius: 5,
+                    strokeColor: 'black',
+                    fillColor: 'white'
+                });
+            }
+            // draw text
+            var text1, text2;
+            if (this.type == 'large') {
+                text1 = new paper.PointText({
+                    point: [center_x - 54, top - radius[1] / 2],
+                    content: '罐号：' + this.data.tank_id + '号罐',
+                    fillColor: 'blue',
+                    fontSize: 20,
+                    fontWeight: 'bold'
+                });
+                text2 = new paper.PointText({
+                    point: [center_x - 54, top - radius[1] / 2 + 25],
+                    content: '油品：' + this.data.oil_type,
+                    fillColor: 'red',
+                    fontSize: 20,
+                    fontWeight: 'bold'
+                });
+            } else if (this.type == "small") {
+                text1 = new paper.PointText({
+                    point: [center_x - 46, top - radius[1] / 2],
+                    content: '罐号：' + this.data.tank_id + '号罐',
+                    fillColor: 'blue',
+                    fontSize: 8,
+                    fontWeight: 'bold'
+                });
+                text2 = new paper.PointText({
+                    point: [center_x - 46, top - radius[1] / 2 + 15],
+                    content: '油品：' + this.data.oil_type,
+                    fillColor: 'red',
+                    fontSize: 8,
+                    fontWeight: 'bold'
+                });
+            }
+            // draw buoy
+            var oil_level, oil_buoy, water_level, water_buoy;
+            if (curr_oil_level > 0 && curr_oil_level <= 1) {
+                oil_level = new paper.Path.Rectangle({
+                    rectangle: {
+                        topLeft: [left + 4, bottom - height * curr_oil_level],
+                        bottomRight: [right - 4, bottom - 3]
+                    },
+                    fillColor: '#4CAF50',
+                });
+                if (this.type == 'large') {
+                    oil_buoy = new paper.Path.Circle({
+                        center: [right - 35 - 2, bottom - height * curr_oil_level],
+                        radius: 7,
+                        strokeColor: 'black',
+                        fillColor: 'white'
+                    });
+                } else if (this.type == 'small') {
+                    oil_buoy = new paper.Path.Circle({
+                        center: [right - 24 - 2, bottom - height * curr_oil_level],
+                        radius: 5,
+                        strokeColor: 'black',
+                        fillColor: 'white'
+                    });
+                }
+            }
 
-            var left_border = new paper.Path.Line({
-                from: [left, top + 2],
-                to: [left, top + height - 3],
-                strokeColor: strokeColor,
-                strokeWidth: 3
-            });
-            var right_border = new paper.Path.Line({
-                from: [right, top + 2],
-                to: [right, top + height - 3],
-                strokeColor: strokeColor,
-                strokeWidth: 3
-            });
-            this.items.push(bottom_ellipse, top_ellipse, left_border, right_border);
+            var group = new paper.Group();
+            this.group = group;
+            group.insertChild(0, border_rect);
+            group.insertChild(1, top_ellipse);
+            group.insertChild(3, mask_rect);
+            group.insertChild(4, fill_rect);
+            group.insertChild(5, pillar);
+            group.insertChild(6, pillar_top);
+            group.insertChild(7, text1);
+            group.insertChild(7, text2);
+            if (oil_level) {
+                group.insertChild(4, oil_level);
+                group.insertChild(8, oil_buoy);
+            }
+            if (water_level)
+                group.insertChild(4, water_level);
             paper.view.draw();
         },
         drawSmall: function() {
             this.drawInternal(50, 20, [90, 30], 140);
         },
         drawLarge: function() {
-            this.drawInternal(50, 20, [160, 40], 250);
+            this.drawInternal(100, 20, [180, 70], 250);
         },
         draw: function() {
             if (this.type == 'small') {
@@ -119,12 +204,11 @@ Proprietary and confidential
         },
         publish: {
             type: 'small',
-            curr: -1, //in percentage          
         },
-        currChanged: function(old_curr, new_curr) {
-            // Avoid remove image when change from -1
-            if (old_curr >= 0)
-                this.draw();
+        dataChanged: function() {
+            if (!this.data.tank_id)
+                return;
+            this.draw();
         }
     });
     </script>
