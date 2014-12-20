@@ -61,6 +61,9 @@ TODO(xiang): make a base element shared by user-page & admin-page
         }
         #about_dialog {
             width: 400px;
+            border: 5px solid;
+            border-color: 0066CC;
+            border-top-width: 40px;
         }
         </style>
         <core-scaffold>
@@ -76,13 +79,6 @@ TODO(xiang): make a base element shared by user-page & admin-page
                     </template>
                 </core-menu>
                 <account-info data={{account_info}}></account-info>
-                <paper-button id="about" raised on-click="{{onAboutClick}}">关于本软件</paper-button>
-                <paper-action-dialog id="about_dialog" layered="false">
-                    <p align="center"><b>欢迎使用油罐监控软件</b></p>
-                    <p align="center"><b>上海骏越工贸有限公司</b></p>
-                    <p align="center"><b>版本: v0.01</b></p>
-                    <paper-button align="center" raised affirmative>关 闭</paper-button>
-                </paper-action-dialog>
             </nav>
 
             <core-toolbar tool flex>
@@ -105,6 +101,9 @@ TODO(xiang): make a base element shared by user-page & admin-page
                     </section>
                     <section type="account-setting">
                         <account-setting data="{{account_info}}"></account-setting>
+                    </section>
+                    <section type="software-info">
+                        <software-info></software-info>
                     </section>
                 </core-animated-pages>
             </div>
@@ -131,6 +130,9 @@ TODO(xiang): make a base element shared by user-page & admin-page
             }, {
                 name: '帐号设置',
                 type: 'account-setting'
+            },{
+                name: '软件信息',
+                type: 'software-info'
             }];
         },
         onClick: function() {

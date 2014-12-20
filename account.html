@@ -14,7 +14,7 @@ Proprietary and confidential
         :host {
             font-size: 14px;
             position: absolute;
-            bottom: 60px;
+            bottom: 0px;
             right: 0px;
             left: 0px;
             border: 1px solid;
@@ -115,6 +115,42 @@ Proprietary and confidential
         },
         onConfirmPasswordChange: function() {
             console.log("onConfirmPasswordChange called");
+        }
+    });
+    </script>
+</polymer-element>
+
+<polymer-element name="software-info">
+    <template>
+        <style>
+        .basic_info {
+            padding-left: 90px;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .category {
+            margin-left: -50px;
+            font-size: 24px;
+            color: #00796B;
+        }
+        .welcome {
+            font-size: 60px;
+        }
+        .company {
+            font-size: 40px;
+        }
+        </style>
+        <div class="basic_info">
+            <core-item icon="description" label="软件信息" class="font-scalable category"></core-item>
+            <p align="center" class="welcome"><b>欢迎使用油罐监控软件</b></p>
+            <p align="center" class="company"><b>上海骏越工贸有限公司</b></p>
+            <p align="center" class="company"><b>版本: v0.01</b></p>
+        </div>
+    </template>
+    <script>
+    Polymer({
+        ready: function() {
+            this.data = {};
         }
     });
     </script>
