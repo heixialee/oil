@@ -11,23 +11,61 @@ Proprietary and confidential
 <polymer-element name="account-info" attributes="data">
     <template>
         <style>
-        :host {
-            font-size: 14px;
+        core-item{
+            margin-left: 20px;
+        }
+        core-menu {
             position: absolute;
-            bottom: 60px;
+            bottom: 0px;
             right: 0px;
             left: 0px;
-            border: 1px solid;
+            width:90%;
+            }
+        #show {
+            background-color: #FFFAF0;
+            margin-left: 10px;
         }
+        paper-button{
+            position: relative;
+            margin-top: 10px;
+            bottom: 0px;
+            right: 0px;
+            left: 0px;
+            background: #4caf50;
+            color: #fff;
+            width:100%;
+        }
+        data {
+                margin-left: 5px;
+                border: 1px solid;
+                width: 120px;
+                height: 30px;
+                font-size: 16;
+                background-color: #FFFFFF;
+                text-align: left;
+            }
         </style>
-        <div>用户名：<b>{{data.name}}</b>
-        </div>
-        <div>登录时间：{{data.login}}</div>
+        <core-menu>    
+            <core-item label="注册用户">
+                <data align="right">{{account_info.name}}</data>
+            </core-item>
+            <core-item label="登录时间">
+                <data align="right">{{account_info.login_time}}</data>
+            </core-item>
+            <paper-button raised on-click="{{onClick}}">登 出</paper-button>
+        </core-menu>
     </template>
     <script>
     Polymer({
         ready: function() {
-            this.data = {};
+            // FIXME(xiang): will return by server.
+            this.account_info = {
+                name: '',
+                login_time: '',
+            };
+        },
+        onClick: function() {
+            this.fire("logout");
         }
     });
     </script>
@@ -64,7 +102,15 @@ Proprietary and confidential
             margin-left: 90px;
             margin-top: 20px;
             width: 160px;
+            background-color: #B8B8B8;
+            border: 1px solid;
         }
+        paper-action-dialog {
+            border: 5px solid;
+            border-color: 0066CC;
+            border-top-width: 50px;
+        }
+
         </style>
         <div class="basic_info">
             <core-item icon="account-box" label="基本信息" class="font-scalable category"></core-item>
@@ -107,6 +153,42 @@ Proprietary and confidential
         },
         onConfirmPasswordChange: function() {
             console.log("onConfirmPasswordChange called");
+        }
+    });
+    </script>
+</polymer-element>
+
+<polymer-element name="software-info">
+    <template>
+        <style>
+        .basic_info {
+            padding-left: 90px;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .category {
+            margin-left: -50px;
+            font-size: 24px;
+            color: #00796B;
+        }
+        .welcome {
+            font-size: 60px;
+        }
+        .company {
+            font-size: 40px;
+        }
+        </style>
+        <div class="basic_info">
+            <core-item icon="description" label="软件信息" class="font-scalable category"></core-item>
+            <p align="center" class="welcome"><b>欢迎使用油罐监控软件</b></p>
+            <p align="center" class="company"><b>上海骏越工贸有限公司</b></p>
+            <p align="center" class="company"><b>版本: v0.01</b></p>
+        </div>
+    </template>
+    <script>
+    Polymer({
+        ready: function() {
+            this.data = {};
         }
     });
     </script>
