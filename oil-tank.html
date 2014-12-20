@@ -270,23 +270,38 @@ Proprietary and confidential
                         <div layout horizontal>
                             <core-item label="水位警报">
                             </core-item>
-                            <paper-slider id="water_warning_setting" value="1" max="5" editable></paper-slider>
+                            <paper-slider id="water_warning_setting" value="1" min="0" max="5" editable></paper-slider>
                             <core-item class="dialog" label=" 水位(m)"></core-item>
                         </div>
 
                         <div layout horizontal>
-                            <core-item label="油位警报">
+                            <core-item label="低油警报">
                             </core-item>
-                            <paper-slider id="oil_warning_setting" value="3" max="20" editable></paper-slider>
+                            <paper-slider id="oil_warning_low_setting" value="3" max="20" editable></paper-slider>
                             <core-item class="dialog" label=" 油位(m)"></core-item>
                         </div>
 
                         <div layout horizontal>
-                            <core-item label="温度警报">
+                            <core-item label="高油警报">
                             </core-item>
-                            <paper-slider id="temp_warning_setting" value="10" max="60" editable></paper-slider>
+                            <paper-slider id="oil_warning_high_setting" value="10" max="40" editable></paper-slider>
+                            <core-item class="dialog" label=" 油位(m)"></core-item>
+                        </div>
+
+                        <div layout horizontal>
+                            <core-item label="低温警报">
+                            </core-item>
+                            <paper-slider id="temp_warning_low_setting" value="-10" min="-40" max="0" editable></paper-slider>
                             <core-item class="dialog" label="  温度(°C)"></core-item>
                         </div>
+
+                        <div layout horizontal>
+                            <core-item label="高温警报">
+                            </core-item>
+                            <paper-slider id="temp_warning_high_setting" value="50" min="40" max="80" editable></paper-slider>
+                            <core-item class="dialog" label="  温度(°C)"></core-item>
+                        </div>
+
                     </div>
                     <paper-button dismissive on-click={{onCancelWarningSetting}}>取消</paper-button>
                     <paper-button affirmative autofocus on-click={{onConfirmWarningSetting}}>确定</paper-button>
@@ -314,9 +329,11 @@ Proprietary and confidential
             this.height = 10;
             //TODO(xiang): fetch current tank data from server.
             this.data = {};
-            this.data.oil_waning_level = 1;
+            this.data.oil_waning_low_level = 1;
+            this.data.oil_waning_high_level = 8;
             this.data.water_warning_level = 0.5;
-            this.data.temperature_warning = 38;
+            this.data.temperature_low_warning = -10;
+            this.data.temperature_high_warning = 50;
             this.data.tank_height = 10;
             this.data.tank_radius = 10;
         },
@@ -355,13 +372,19 @@ Proprietary and confidential
         onConfirmWarningSetting: function() {
             if (this.$.water_warning_setting.value)
                 this.data.water_warning_level = Number(this.$.water_warning_setting.value);
-            if (this.$.oil_warning_setting.value)
-                this.data.oil_warning_level = Number(this.$.oil_warning_setting.value);
-            if (this.$.temp_warning_setting.value)
-                this.data.temperature_warning = Number(this.$.temp_warning_setting.value);
+            if (this.$.oil_warning_low_setting.value)
+                this.data.oil_warning_low_level = Number(this.$.oil_warning_low_setting.value);
+            if (this.$.oil_warning_high_setting.value)
+                this.data.oil_warning_high_level = Number(this.$.oil_warning_high_setting.value);
+            if (this.$.temp_warning_low_setting.value)
+                this.data.temperature_low_warning = Number(this.$.temp_warning_low_setting.value);
+             if (this.$.temp_warning_high_setting.value)
+                this.data.temperature_high_warning = Number(this.$.temp_warning_high_setting.value);
             console.log("water:%d", this.data.water_warning_level);
-            console.log("oil:%d", this.data.oil_warning_level);
-            console.log("temp:%d", this.data.temperature_warning);
+            console.log("oil low:%d", this.data.oil_warning_low_level);
+            console.log("oil high:%d", this.data.oil_warning_high_level);
+            console.log("temp low:%d", this.data.temperature_low_warning);
+            console.log("temp high:%d", this.data.temperature_high_warning);
             this.updateData(this.tank_id - 1);
         },
         onCancelWarningSetting: function() {
