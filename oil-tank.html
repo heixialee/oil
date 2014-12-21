@@ -366,6 +366,7 @@ Proprietary and confidential
                 this.data.tank_radius = Number(this.$.tank_radius_setting.value);
             console.log("tank_height: %d", this.data.tank_height);
             console.log("tank_radius:%d", this.data.tank_radius);
+            this.$.image.dataChanged();
         },
         onWarningSetting: function() {
             this.$.warning_setting_dialog.toggle();
