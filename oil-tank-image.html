@@ -128,6 +128,7 @@ Proprietary and confidential
                     fontWeight: 'bold'
                 });
             } else if (this.type == "small") {
+                /*
                 text1 = new paper.PointText({
                     point: [center_x - 46, top - radius[1] / 2],
                     content: '罐号：' + this.data.tank_id + '号罐',
@@ -142,6 +143,7 @@ Proprietary and confidential
                     fontSize: 8,
                     fontWeight: 'bold'
                 });
+                */
             }
             // draw buoy
             var oil_level, oil_buoy, water_level, water_buoy;
@@ -203,8 +205,10 @@ Proprietary and confidential
             group.insertChild(4, fill_rect);
             group.insertChild(5, pillar);
             group.insertChild(6, pillar_top);
-            group.insertChild(7, text1);
-            group.insertChild(7, text2);
+            if (text1)
+                group.insertChild(7, text1);
+            if (text2)
+                group.insertChild(7, text2);
             if (water_level) {
                 group.insertChild(4, water_level);
                 group.insertChild(8, water_buoy);
