@@ -14,17 +14,21 @@ Proprietary and confidential
 <link rel="import" href="./bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="./bower_components/paper-radio-button/paper-radio-button.html">
 
-<link rel="import" href="./oil-chart.html">
-<link rel="import" href="./oil-tank.html">
+<link rel="import" href="./oil-tank-chart.html">
+<link rel="import" href="./oil-tank-view.html">
 
-<polymer-element name="oil-summary" attributes="tank_id">
+<polymer-element name="oil-summary" attributes="data">
     <template>
         <style>
         </style>
-        <oil-tank type="detail" tank_id={{tank_id}}></oil-tank>
+        <oil-tank-view type="detail" data="{{data}}"></oil-tank-view>
     </template>
     <script>
-    Polymer({});
+    Polymer({
+        created: function() {
+            this.data = {};
+        }
+    });
     </script>
 </polymer-element>
 
@@ -32,7 +36,7 @@ Proprietary and confidential
     <template>
         <style>
         </style>
-        <oil-chart id="chart" samples={{samples}}></oil-chart>
+        <oil-tank-chart id="chart" samples={{samples}}></oil-tank-chart>
     </template>
     <script>
     Polymer({
@@ -53,7 +57,7 @@ Proprietary and confidential
     <template>
         <style>
         </style>
-        <oil-chart id="chart" samples={{samples}}></oil-chart>
+        <oil-tank-chart id="chart" samples={{samples}}></oil-tank-chart>
     </template>
     <script>
     Polymer({
@@ -72,7 +76,7 @@ Proprietary and confidential
 
 <polymer-element name="oil-temp">
     <template>
-        <oil-chart id="chart" samples={{samples}}></oil-chart>
+        <oil-tank-chart id="chart" samples={{samples}}></oil-tank-chart>
     </template>
     <script>
     Polymer({
@@ -91,7 +95,7 @@ Proprietary and confidential
 
 <polymer-element name="oil-density">
     <template>
-        <oil-chart id="chart" samples={{samples}}></oil-chart>
+        <oil-tank-chart id="chart" samples={{samples}}></oil-tank-chart>
     </template>
     <script>
     Polymer({
@@ -110,7 +114,7 @@ Proprietary and confidential
 
 <polymer-element name="oil-volume">
     <template>
-        <oil-chart id="chart" samples={{samples}}></oil-chart>
+        <oil-tank-chart id="chart" samples={{samples}}></oil-tank-chart>
     </template>
     <script>
     Polymer({
@@ -129,7 +133,7 @@ Proprietary and confidential
 
 <polymer-element name="oil-weight">
     <template>
-        <oil-chart id="chart" samples={{samples}}></oil-chart>
+        <oil-tank-chart id="chart" samples={{samples}}></oil-tank-chart>
     </template>
     <script>
     Polymer({
@@ -150,9 +154,9 @@ Proprietary and confidential
 <!--
 TODO(xiang): make a base element shared by user-page & admin-page
 -->
-<polymer-element name="oil-tank-page">
+<polymer-element name="oil-tank-page" attributes="datas tank_id">
     <template>
-        <template if="{{tank_id > 0}}">
+        <template if="{{data.tank_id > 0}}">
             <style>
             core-scaffold /deep/ core-toolbar {
                 background-color: #3f51b5;
@@ -198,7 +202,7 @@ TODO(xiang): make a base element shared by user-page & admin-page
                 </nav>
 
                 <core-toolbar tool flex>
-                    <div flex>油罐控制台 (#{{tank_id}}号罐)</div>
+                    <div flex>油罐控制台 (#{{data.tank_id}}号罐)</div>
                     <core-icon-button id="backward" icon="chevron-left" on-click="{{onBackward}}">
                         <div>返回</div>
                     </core-icon-button>
@@ -210,7 +214,7 @@ TODO(xiang): make a base element shared by user-page & admin-page
                 -->
                     <core-animated-pages id="pages" valueattr="type" selected="{{route}}">
                         <section type="summary">
-                            <oil-summary tank_id="{{tank_id}}"></oil-summary>
+                            <oil-summary data="{{data}}"></oil-summary>
                         </section>
                         <div type="height">
                             <oil-height></oil-height>
@@ -237,8 +241,13 @@ TODO(xiang): make a base element shared by user-page & admin-page
     </template>
     <script>
     Polymer({
-        ready: function() {
+        created: function() {
+            this.datas = [];
+            this.tank_id = -1;
+        },
+        attached: function() {
             this.route = "summary";
+            this.data = this.datas[this.tank_id - 1];
             this.sections = [{
                 name: '油罐概况',
                 type: 'summary'
@@ -263,7 +272,6 @@ TODO(xiang): make a base element shared by user-page & admin-page
             }, ];
         },
         publish: {
-            tank_id: -1,
         },
         onBackward: function() {
             this.fire("backward");

@@ -41,9 +41,25 @@ Proprietary and confidential
     </script>
 </polymer-element>
 
+<polymer-element name="test-elem" attributes="data">
+    <template>
+    </template>
+    <script type="text/javascript">
+    Polymer({
+        created: function() {
+            this.data = {};
+        },
+        dataChanged: function() {
+            console.log('binding data changed!');
+        }
+    });
+    </script>
+</polymer-element>
+
 <polymer-element name="oil-tank" attributes="data">
     <template>
-        <template if="{{tank_id > 0 && type == 'outline'}}">
+        <test-elem data=""></test-elem>
+         <template if="{{tank_id > 0 && type == 'outline'}}">
             <style>
             .oil-tank {
                 margin: 20px 10px 40px 20px;
@@ -105,209 +121,209 @@ Proprietary and confidential
                     </core-item>
                 </div>
             </div>
-        </template>
-        <template if="{{tank_id > 0 && type=='detail'}}">
-            <style>
-            .oil-tank {
-                margin: 0px 0px 0px 0px;
-            }
-            oil-image {
-                margin: 40px 0px 0px 40px;
-            }
-            .desc > core-item {
-                margin-bottom: 20px;
-                margin-top: 0px;
-                margin-right: 20px;
-                height: 40px;
-            }
-            data {
-                margin-left: 10px;
-                margin-top: 0px;
-                background-color: #FFFFFF;
-                border-bottom: 1px solid #bdbdbd;
-                border: 2px solid;
-                width: 120px;
-                height: 24px;
-                font-size: 20px;
-            }
-            .desc {
-                margin-top: 30px;
-                margin-left: 20px;
-            }
-            .indicator {
-                margin-top: 30px;
-            }
-            .indicator > .title {
-                font-size: 18px;
-                font-weight: 10px;
-                margin-left: 10px;
-                margin-right: 20px;
-                margin-top: -8px;
-                padding: 4px;
-                border: 2px solid;
-            }
-            .indicator > paper-radio-button {
-                margin-top: 3px;
-                margin-left: 5px;
-                margin-right: 15px;
-            }
-            paper-radio-button::shadow #ink[checked] {
-                color: #F44336;
-            }
-            paper-radio-button::shadow #onRadio {
-                background-color: #F44336;
-            }
-            paper-slider {
-                margin-bottom: 20px;
-                margin-top: 20px;
-                margin-left: 20px;
-                width: 100%;
-            }
-            .oil_type {
-                margin-top: -100px;
-                margin-left: 190px;
-                font-size: 16px;
-            }
-            .settings {
-                margin-top: 40px;
-                margin-left: 20px;
-                width: 400px;
-            }
-            .settings > paper-button {
-                background: #3F51B5;
-                color: #fff;
-                margin-left: 40px;
-            }
-            [dismissive] {
-                background: #BDBDBD;
-                color: #000;
-            }
-            [affirmative] {
-                background: #4caf50;
-                color: #fff;
-            }
-            paper-action-dialog {
-                width: 800px;
-            }
-            </style>
-            <div class='oil-tank' horizontal layout>
-                <oil-image id="image" type="large" data="{{data}}"></oil-image>
-                <div class='desc' vertical layout>
-                    <core-item src="images/oil_high.png" label="油面高位: " on-click="{{onChooseCategory}}">
-                        <data>{{data.oil_level_high}} m</data>
-                        <small-chart></small-chart>
-                    </core-item>
-                    <core-item src="images/oil_low.png" label="油面低位: " on-click="{{onChooseCategory}}">
-                        <data>{{data.oil_level_low}} m</data>
-                        <small-chart></small-chart>
-                    </core-item>
-                    <core-item src="images/water.png" label="水面高度: " on-click="{{onChooseCategory}}">
-                        <data>{{data.water_level}} m</data>
-                        <small-chart></small-chart>
-                    </core-item>
-                    <core-item src="images/temperature.png" label="平均温度: " on-click="{{onChooseCategory}}">
-                        <data>{{data.temperature}} °C</data>
-                        <small-chart></small-chart>
-                    </core-item>
-                    <core-item src="images/volume.png" label="油品体积: " on-click="{{onChooseCategory}}">
-                        <data>{{data.oil_volume}}
-                            <font>m<sup>3</sup>
-                            </font>
-                        </data>
-                        <small-chart></small-chart>
-                    </core-item>
-                    <core-item src="images/density.png" label="油品密度: " on-click="{{onChooseCategory}}">
-                        <data>{{data.oil_density}} kg/
-                            <font>m<sup>3</sup>
-                            </font>
-                        </data>
-                        <small-chart></small-chart>
-                    </core-item>
-                    <core-item src="images/weight.png" label="油品质量: " on-click="{{onChooseCategory}}">
-                        <data>{{data.oil_weight}} kg</data>
-                        <small-chart></small-chart>
-                    </core-item>
-                    <div class="indicator" layout horizontal>
-                        <div class="title">
-                            <b>预警状态</b>
-                        </div>
-                        <b>水位:</b>
-                        <paper-radio-button id="water_level" disabled></paper-radio-button>
-                        <b>油位:</b>
-                        <paper-radio-button id="oil_level" disabled></paper-radio-button>
-                        <b>温度:</b>
-                        <paper-radio-button id="temp" disabled></paper-radio-button>
-                        <b>泄露:</b>
-                        <paper-radio-button id="leak" disabled></paper-radio-button>
+    </template>
+    <template if="{{tank_id > 0 && type=='detail'}}">
+        <style>
+        .oil-tank {
+            margin: 0px 0px 0px 0px;
+        }
+        oil-image {
+            margin: 40px 0px 0px 40px;
+        }
+        .desc > core-item {
+            margin-bottom: 20px;
+            margin-top: 0px;
+            margin-right: 20px;
+            height: 40px;
+        }
+        data {
+            margin-left: 10px;
+            margin-top: 0px;
+            background-color: #FFFFFF;
+            border-bottom: 1px solid #bdbdbd;
+            border: 2px solid;
+            width: 120px;
+            height: 24px;
+            font-size: 20px;
+        }
+        .desc {
+            margin-top: 30px;
+            margin-left: 20px;
+        }
+        .indicator {
+            margin-top: 30px;
+        }
+        .indicator > .title {
+            font-size: 18px;
+            font-weight: 10px;
+            margin-left: 10px;
+            margin-right: 20px;
+            margin-top: -8px;
+            padding: 4px;
+            border: 2px solid;
+        }
+        .indicator > paper-radio-button {
+            margin-top: 3px;
+            margin-left: 5px;
+            margin-right: 15px;
+        }
+        paper-radio-button::shadow #ink[checked] {
+            color: #F44336;
+        }
+        paper-radio-button::shadow #onRadio {
+            background-color: #F44336;
+        }
+        paper-slider {
+            margin-bottom: 20px;
+            margin-top: 20px;
+            margin-left: 20px;
+            width: 100%;
+        }
+        .oil_type {
+            margin-top: -100px;
+            margin-left: 190px;
+            font-size: 16px;
+        }
+        .settings {
+            margin-top: 40px;
+            margin-left: 20px;
+            width: 400px;
+        }
+        .settings > paper-button {
+            background: #3F51B5;
+            color: #fff;
+            margin-left: 40px;
+        }
+        [dismissive] {
+            background: #BDBDBD;
+            color: #000;
+        }
+        [affirmative] {
+            background: #4caf50;
+            color: #fff;
+        }
+        paper-action-dialog {
+            width: 800px;
+        }
+        </style>
+        <div class='oil-tank' horizontal layout>
+            <oil-image id="image" type="large" data="{{data}}"></oil-image>
+            <div class='desc' vertical layout>
+                <core-item src="images/oil_high.png" label="油面高位: " on-click="{{onChooseCategory}}">
+                    <data>{{data.oil_level_high}} m</data>
+                    <small-chart></small-chart>
+                </core-item>
+                <core-item src="images/oil_low.png" label="油面低位: " on-click="{{onChooseCategory}}">
+                    <data>{{data.oil_level_low}} m</data>
+                    <small-chart></small-chart>
+                </core-item>
+                <core-item src="images/water.png" label="水面高度: " on-click="{{onChooseCategory}}">
+                    <data>{{data.water_level}} m</data>
+                    <small-chart></small-chart>
+                </core-item>
+                <core-item src="images/temperature.png" label="平均温度: " on-click="{{onChooseCategory}}">
+                    <data>{{data.temperature}} °C</data>
+                    <small-chart></small-chart>
+                </core-item>
+                <core-item src="images/volume.png" label="油品体积: " on-click="{{onChooseCategory}}">
+                    <data>{{data.oil_volume}}
+                        <font>m<sup>3</sup>
+                        </font>
+                    </data>
+                    <small-chart></small-chart>
+                </core-item>
+                <core-item src="images/density.png" label="油品密度: " on-click="{{onChooseCategory}}">
+                    <data>{{data.oil_density}} kg/
+                        <font>m<sup>3</sup>
+                        </font>
+                    </data>
+                    <small-chart></small-chart>
+                </core-item>
+                <core-item src="images/weight.png" label="油品质量: " on-click="{{onChooseCategory}}">
+                    <data>{{data.oil_weight}} kg</data>
+                    <small-chart></small-chart>
+                </core-item>
+                <div class="indicator" layout horizontal>
+                    <div class="title">
+                        <b>预警状态</b>
                     </div>
+                    <b>水位:</b>
+                    <paper-radio-button id="water_level" disabled></paper-radio-button>
+                    <b>油位:</b>
+                    <paper-radio-button id="oil_level" disabled></paper-radio-button>
+                    <b>温度:</b>
+                    <paper-radio-button id="temp" disabled></paper-radio-button>
+                    <b>泄露:</b>
+                    <paper-radio-button id="leak" disabled></paper-radio-button>
                 </div>
             </div>
-            <div class="oil_type"><b>{{data.oil_type}}</b>
-            </div>
-            <div layout horizontal class="settings">
-                <paper-button raised flex on-click="{{onTankSetting}}">油 罐 设 置</paper-button>
-                <paper-action-dialog id="tank_setting_dialog" backdrop autoCloseDisabled layered="false">
-                    <div layout vertical>
-                        <div layout horizontal>
-                            <core-item label="油桶高度:">
-                            </core-item>
-                            <paper-slider id="tank_height_setting" value="1" max="50" editable></paper-slider>
-                            <core-item class="dialog" label=" 高度(m)"></core-item>
-                        </div>
-                        <div layout horizontal>
-                            <core-item label="油桶半径:">
-                            </core-item>
-                            <paper-slider id="tank_radius_setting" value="1" max="50" editable></paper-slider>
-                            <core-item class="dialog" label=" 半径(m)"></core-item>
-                        </div>
+        </div>
+        <div class="oil_type"><b>{{data.oil_type}}</b>
+        </div>
+        <div layout horizontal class="settings">
+            <paper-button raised flex on-click="{{onTankSetting}}">油 罐 设 置</paper-button>
+            <paper-action-dialog id="tank_setting_dialog" backdrop autoCloseDisabled layered="false">
+                <div layout vertical>
+                    <div layout horizontal>
+                        <core-item label="油桶高度:">
+                        </core-item>
+                        <paper-slider id="tank_height_setting" value="1" max="50" editable></paper-slider>
+                        <core-item class="dialog" label=" 高度(m)"></core-item>
                     </div>
-                    <paper-button dismissive>取消</paper-button>
-                    <paper-button affirmative autofocus on-click={{onConfirmTankSetting}}>确定</paper-button>
-                </paper-action-dialog>
-                <paper-button raised flex on-click="{{onWarningSetting}}">预 警 设 置</paper-button>
-                <paper-action-dialog id="warning_setting_dialog" backdrop autoCloseDisabled layered="false">
-                    <div layout vertical>
-                        <div layout horizontal>
-                            <core-item label="水位警报">
-                            </core-item>
-                            <paper-slider id="water_warning_setting" value="1" min="0" max="5" editable></paper-slider>
-                            <core-item class="dialog" label=" 水位(m)"></core-item>
-                        </div>
-
-                        <div layout horizontal>
-                            <core-item label="低油警报">
-                            </core-item>
-                            <paper-slider id="oil_warning_low_setting" value="3" max="20" editable></paper-slider>
-                            <core-item class="dialog" label=" 油位(m)"></core-item>
-                        </div>
-
-                        <div layout horizontal>
-                            <core-item label="高油警报">
-                            </core-item>
-                            <paper-slider id="oil_warning_high_setting" value="10" max="40" editable></paper-slider>
-                            <core-item class="dialog" label=" 油位(m)"></core-item>
-                        </div>
-
-                        <div layout horizontal>
-                            <core-item label="低温警报">
-                            </core-item>
-                            <paper-slider id="temp_warning_low_setting" value="-10" min="-40" max="0" editable></paper-slider>
-                            <core-item class="dialog" label="  温度(°C)"></core-item>
-                        </div>
-
-                        <div layout horizontal>
-                            <core-item label="高温警报">
-                            </core-item>
-                            <paper-slider id="temp_warning_high_setting" value="50" min="40" max="80" editable></paper-slider>
-                            <core-item class="dialog" label="  温度(°C)"></core-item>
-                        </div>
-
+                    <div layout horizontal>
+                        <core-item label="油桶半径:">
+                        </core-item>
+                        <paper-slider id="tank_radius_setting" value="1" max="50" editable></paper-slider>
+                        <core-item class="dialog" label=" 半径(m)"></core-item>
                     </div>
-                    <paper-button dismissive on-click={{onCancelWarningSetting}}>取消</paper-button>
-                    <paper-button affirmative autofocus on-click={{onConfirmWarningSetting}}>确定</paper-button>
-                </paper-action-dialog>
-            </div>
-        </template>
+                </div>
+                <paper-button dismissive>取消</paper-button>
+                <paper-button affirmative autofocus on-click={{onConfirmTankSetting}}>确定</paper-button>
+            </paper-action-dialog>
+            <paper-button raised flex on-click="{{onWarningSetting}}">预 警 设 置</paper-button>
+            <paper-action-dialog id="warning_setting_dialog" backdrop autoCloseDisabled layered="false">
+                <div layout vertical>
+                    <div layout horizontal>
+                        <core-item label="水位警报">
+                        </core-item>
+                        <paper-slider id="water_warning_setting" value="1" min="0" max="5" editable></paper-slider>
+                        <core-item class="dialog" label=" 水位(m)"></core-item>
+                    </div>
+
+                    <div layout horizontal>
+                        <core-item label="低油警报">
+                        </core-item>
+                        <paper-slider id="oil_warning_low_setting" value="3" max="20" editable></paper-slider>
+                        <core-item class="dialog" label=" 油位(m)"></core-item>
+                    </div>
+
+                    <div layout horizontal>
+                        <core-item label="高油警报">
+                        </core-item>
+                        <paper-slider id="oil_warning_high_setting" value="10" max="40" editable></paper-slider>
+                        <core-item class="dialog" label=" 油位(m)"></core-item>
+                    </div>
+
+                    <div layout horizontal>
+                        <core-item label="低温警报">
+                        </core-item>
+                        <paper-slider id="temp_warning_low_setting" value="-10" min="-40" max="0" editable></paper-slider>
+                        <core-item class="dialog" label="  温度(°C)"></core-item>
+                    </div>
+
+                    <div layout horizontal>
+                        <core-item label="高温警报">
+                        </core-item>
+                        <paper-slider id="temp_warning_high_setting" value="50" min="40" max="80" editable></paper-slider>
+                        <core-item class="dialog" label="  温度(°C)"></core-item>
+                    </div>
+
+                </div>
+                <paper-button dismissive on-click={{onCancelWarningSetting}}>取消</paper-button>
+                <paper-button affirmative autofocus on-click={{onConfirmWarningSetting}}>确定</paper-button>
+            </paper-action-dialog>
+        </div>
+    </template>
     </template>
     <script>
     var oil_types = [
@@ -396,7 +412,8 @@ Proprietary and confidential
         tank_idChanged: function(old_id, new_id) {
             var idx = new_id - 1;
             this.updateData(idx);
-            this.$.image.dataChanged();
+            console.log(old_id + '->' + new_id);
+            //this.$.image.dataChanged();
         },
         updateData: function(idx) {
             var i = 0;

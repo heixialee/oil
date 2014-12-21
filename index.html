@@ -13,7 +13,7 @@ Proprietary and confidential
     var win = gui.Window.get();
     win.maximize();
     </script>
-    
+
     <script src="./bower_components/webcomponentsjs/webcomponents.js"></script>
     <link rel="import" href="./bower_components/core-pages/core-pages.html">
 
@@ -21,6 +21,7 @@ Proprietary and confidential
     <link href="user-page.html" rel="import">
     <link href="admin-page.html" rel="import">
     <link href="oil-tank-page.html" rel="import">
+    <link href="oil-tank-data.html" rel="import">
     <style>
     body {
         font-family: arial, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', '宋体', \5b8b\4f53, Tahoma, Arial, Helvetica, STHeiti;
@@ -29,7 +30,7 @@ Proprietary and confidential
 </head>
 
 <body fullbleed layout vertical unresolved>
-    <polymer-element name='home-page'>
+    <polymer-element name='home-page' attributes="oil_tank_data">
         <template>
             <style>
             :host,
@@ -38,44 +39,51 @@ Proprietary and confidential
                 height: 100%;
             }
             </style>
-            <core-pages selected="{{selected}}" flex>
-                <login-page id="login_pg"></login-page>
-                <user-page id="user_pg"></user-page>
-                <admin-page id="admin_pg"></admin-page>
-                <oil-tank-page id="oil_tank_pg"></oil-tank-page>
+            <oil-tank-data data="{{oil_tank_data}}"></oil-tank-data>
+            <core-pages id="pages" selected="{{selected}}" valueattr="label" flex>
+                <login-page label="login" id="login_pg"></login-page>
+                <user-page label="user" id="user_pg" data="{{oil_tank_data}}"></user-page>
+                <admin-page label="admin" id="admin_pg" data="{{oil_tank_data}}"></admin-page>
             </core-pages>
         </template>
         <script>
         Polymer({
-            ready: function() {
-                this.selected = 2;
+            created: function() {
+                this.oil_tank_data = [];
+            },
+            attached: function() {
+                this.selected = 1;
                 this.prev_selected = 0;
                 var that = this;
                 this.$.login_pg.addEventListener('login', function(e) {
-                    if (e.detail.type == 'user')
-                        that.selected = 1;
-                    else if (e.detail.type == 'admin')
-                        that.selected = 2;
+                    that.selected = e.detail.type;
                 });
-                this.$.admin_pg.addEventListener('choose-tank', function(e) {
-                    that.$.oil_tank_pg.tank_id = e.detail.id;
+                document.addEventListener('choose-tank', function(e) {
+                    var tank_id = e.detail.id;
+                    var tank_label = 'tank_' + tank_id;
                     that.prev_selected = that.selected;
-                    that.selected = 3;
+                    var found = false;
+                    for (var i in that.$.pages.children) {
+                        var e = that.$.pages.children[i];
+                        if (e && e.getAttribute && e.getAttribute('label') == tank_label) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        var elem = document.createElement('oil-tank-page');
+                        elem.bind('datas', new PathObserver(that, 'oil_tank_data'));
+                        elem.setAttribute('tank_id', tank_id);
+                        elem.setAttribute('label', 'tank_' + tank_id);
+                        that.$.pages.appendChild(elem);
+                    }
+                    that.selected = 'tank_' + tank_id;
                 });
-                this.$.admin_pg.addEventListener('logout', function(e) {
+                document.addEventListener('logout', function(e) {
                     that.selected = 0;
                     this.prev_selected = 0;
                 });
-                this.$.user_pg.addEventListener('choose-tank', function(e) {
-                    that.$.oil_tank_pg.tank_id = e.detail.id;
-                    that.prev_selected = that.selected;
-                    that.selected = 3;
-                });
-                this.$.user_pg.addEventListener('logout', function(e) {
-                    that.selected = 0;
-                    this.prev_selected = 0;
-                });
-                this.$.oil_tank_pg.addEventListener('backward', function(e) {
+                document.addEventListener('backward', function(e) {
                     that.selected = that.prev_selected;
                 });
             },

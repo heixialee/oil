@@ -6,7 +6,7 @@ Proprietary and confidential
 
 <script type="text/javascript" src="./bower_components/paper.js/paper-full.min.js"></script>
 
-<polymer-element name='oil-image' attributes="data">
+<polymer-element name='oil-tank-image' attributes="data">
     <template>
         <style>
         </style>
@@ -232,9 +232,13 @@ Proprietary and confidential
             type: 'small',
         },
         dataChanged: function() {
+            /*
+                        console.log('222222');
             if (!this.data.tank_id)
                 return;
             this.draw();
+            console.log('111111');
+            */
         }
     });
     </script>
