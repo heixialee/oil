@@ -389,9 +389,12 @@ Proprietary and confidential
             this.updateData(this.tank_id - 1);
         },
         onCancelWarningSetting: function() {
-            this.$.water_warning_setting.value = undefined;
-            this.$.oil_warning_setting.value = undefined;
-            this.$.temp_warning_setting.value = undefined;
+            // setting the undifined won't show the value set beofe (peizhao)
+            /*this.$.water_warning_setting.value = undefined;
+            this.$.oil_warning_low_setting.value = undefined;
+            this.$.oil_warning_high_setting.value = undefined;
+            this.$.temp_warning_low_setting.value = undefined;
+            this.$.temp_warning_high_setting.value = undefined;*/
         },
         tank_idChanged: function(old_id, new_id) {
             var idx = new_id - 1;
