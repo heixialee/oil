@@ -336,6 +336,8 @@ Proprietary and confidential
                 this.data.tank_radius = Number(this.$.tank_radius_setting.value);
             console.log("tank_height: %d", this.data.tank_height);
             console.log("tank_radius:%d", this.data.tank_radius);
+            this.$.image.draw();
+            this.demon();
         },
         onWarningSetting: function() {
             this.$.warning_setting_dialog.toggle();
@@ -359,9 +361,11 @@ Proprietary and confidential
             this.dataChanged();
         },
         onCancelWarningSetting: function() {
+            /*
             this.$.water_warning_setting.value = undefined;
             this.$.oil_warning_setting.value = undefined;
             this.$.temp_warning_setting.value = undefined;
+            */
         },
         dataChanged: function() {
             if (!this.$.oil_level || !this.$.water_level || !this.$.temp)
@@ -391,6 +395,18 @@ Proprietary and confidential
                 this.$.temp.checked = false;
                 this.$.temp.disabled = true;
             }
+        },
+        demon: function() {
+            console.log("demon called");
+            this.data.oil_level_high=Math.floor((Math.random() * 10) + 5);
+            this.data.temperature=Math.floor((Math.random() * 10) + 9);
+            this.data.water_level=Math.floor(Math.random() * 10);
+            this.data.oil_level_low=this.data.water_level;
+            this.$.image.drawbyid();
+            var obj=this;
+                setTimeout(function(){
+                obj.demon();
+            }, 3000);
         }
     });
     </script>
