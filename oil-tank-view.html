@@ -41,7 +41,7 @@ Proprietary and confidential
     </script>
 </polymer-element>
 
-<polymer-element name="oil-tank-view" attributes="data">
+<polymer-element name="oil-tank-view" attributes="data active">
     <template>
         <template if="{{data.tank_id > 0 && type == 'outline'}}">
             <style>
@@ -193,7 +193,7 @@ Proprietary and confidential
             }
             </style>
             <div class='container' horizontal layout>
-                <oil-tank-image id="image" type="large" data="{{data}}"></oil-tank-image>
+                <oil-tank-image id="image" type="large" data="{{data}}" active="{{active}}"></oil-tank-image>
                 <div class='desc' vertical layout>
                     <core-item src="images/oil_high.png" label="油面高位: " on-click="{{onChooseCategory}}">
                         <data>{{data.oil_level_high}} m</data>
@@ -312,6 +312,7 @@ Proprietary and confidential
     Polymer({
         created: function() {
             this.data = {};
+            this.active = false;
         },
         ready: function() {
         },
@@ -336,7 +337,7 @@ Proprietary and confidential
                 this.data.tank_radius = Number(this.$.tank_radius_setting.value);
             console.log("tank_height: %d", this.data.tank_height);
             console.log("tank_radius:%d", this.data.tank_radius);
-            this.$.image.draw();
+            //this.$.image.draw();
             this.demon();
         },
         onWarningSetting: function() {

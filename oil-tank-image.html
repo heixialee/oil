@@ -6,7 +6,7 @@ Proprietary and confidential
 
 <script type="text/javascript" src="./bower_components/paper.js/paper-full.min.js"></script>
 
-<polymer-element name='oil-tank-image' attributes="data">
+<polymer-element name='oil-tank-image' attributes="data active">
     <template>
         <style>
         </style>
@@ -15,9 +15,13 @@ Proprietary and confidential
     <script>
     var fillColor = '#90A4AE';
     var strokeColor = '#424242';
+    var papers = [];
     Polymer({
         created: function() {
             this.data = {};
+            this.active = true;
+            var this_paper = new paper.PaperScope();
+            this.paper_idx = papers.push(this_paper) - 1;
         },
         attached: function() {
             var canvas = this.$.oil_tank;
@@ -28,16 +32,17 @@ Proprietary and confidential
                 canvas.width = 420;
                 canvas.height = 390;
             }
-            paper.setup(canvas);
+            papers[this.paper_idx].setup(canvas);
             this.items = [];
             this.draw();
         },
         drawInternal: function(top, left, radius, height) {
+            paper = papers[this.paper_idx];
             //TODO make sure this is called necessarily.
             if (this.group)
                 this.group.remove();
-            var curr_oil_level = this.data.oil_level_high / this.data.tank_height;
-            var curr_water_level = this.data.water_level / this.data.tank_height;
+            var curr_oil_level = Math.min(this.data.oil_level_high / this.data.tank_height, 1);
+            var curr_water_level = Math.min(this.data.water_level / this.data.tank_height, 1);
             var center_x = left + radius[0];
             var right = left + radius[0] * 2;
             var bottom = top + height;
@@ -226,6 +231,8 @@ Proprietary and confidential
             this.drawInternal(100, 20, [180, 70], 250);
         },
         draw: function() {
+            if (!this.active)
+                return;
             if (this.type == 'small') {
                 this.drawSmall();
             } else if (this.type == 'large') {

@@ -17,16 +17,17 @@ Proprietary and confidential
 <link rel="import" href="./oil-tank-chart.html">
 <link rel="import" href="./oil-tank-view.html">
 
-<polymer-element name="oil-summary" attributes="data">
+<polymer-element name="oil-summary" attributes="data active">
     <template>
         <style>
         </style>
-        <oil-tank-view type="detail" data="{{data}}"></oil-tank-view>
+        <oil-tank-view type="detail" data="{{data}}" active="{{active}}"></oil-tank-view>
     </template>
     <script>
     Polymer({
         created: function() {
             this.data = {};
+            this.active = false;
         }
     });
     </script>
@@ -154,7 +155,7 @@ Proprietary and confidential
 <!--
 TODO(xiang): make a base element shared by user-page & admin-page
 -->
-<polymer-element name="oil-tank-page" attributes="datas tank_id">
+<polymer-element name="oil-tank-page" attributes="datas tank_id home_selected active">
     <template>
         <template if="{{data.tank_id > 0}}">
             <style>
@@ -214,7 +215,7 @@ TODO(xiang): make a base element shared by user-page & admin-page
                 -->
                     <core-animated-pages id="pages" valueattr="type" selected="{{route}}">
                         <section type="summary">
-                            <oil-summary data="{{data}}"></oil-summary>
+                            <oil-summary data="{{data}}" active="{{active}}"></oil-summary>
                         </section>
                         <div type="height">
                             <oil-height></oil-height>
@@ -244,10 +245,12 @@ TODO(xiang): make a base element shared by user-page & admin-page
         created: function() {
             this.datas = [];
             this.tank_id = -1;
+            this.home_selected = -1;
         },
         attached: function() {
             this.route = "summary";
             this.data = this.datas[this.tank_id - 1];
+            this.active = this.home_selected == 'tank_' + this.tank_id ? true : false;
             this.sections = [{
                 name: '油罐概况',
                 type: 'summary'
@@ -275,6 +278,9 @@ TODO(xiang): make a base element shared by user-page & admin-page
         },
         onBackward: function() {
             this.fire("backward");
+        },
+        home_selectedChanged: function() {
+            this.active = this.home_selected == 'tank_' + this.tank_id ? true : false;
         }
     });
     </script>

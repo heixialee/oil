@@ -30,7 +30,7 @@ Proprietary and confidential
 </head>
 
 <body fullbleed layout vertical unresolved>
-    <polymer-element name='home-page' attributes="oil_tank_data">
+    <polymer-element name='home-page' attributes="oil_tank_data selected">
         <template>
             <style>
             :host,
@@ -73,6 +73,7 @@ Proprietary and confidential
                     if (!found) {
                         var elem = document.createElement('oil-tank-page');
                         elem.bind('datas', new PathObserver(that, 'oil_tank_data'));
+                        elem.bind('home_selected', new PathObserver(that, 'selected'))
                         elem.setAttribute('tank_id', tank_id);
                         elem.setAttribute('label', 'tank_' + tank_id);
                         that.$.pages.appendChild(elem);
@@ -86,10 +87,10 @@ Proprietary and confidential
                 document.addEventListener('backward', function(e) {
                     that.selected = that.prev_selected;
                 });
-            },
+            }
         });
         </script>
     </polymer-element>
 
-    <home-page></home-page>
+    <home-page id="home"></home-page>
 </body>
