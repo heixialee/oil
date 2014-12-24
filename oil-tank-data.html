@@ -4,8 +4,11 @@ Unauthorized copying of this file, via any medium is strictly prohibited
 Proprietary and confidential
 -->
 
+<link rel="import" href="./bower_components/core-ajax/core-ajax.html">
+
 <polymer-element name="oil-tank-data" attributes="data">
     <template>
+        <core-ajax auto url="./tanks-2014-12-24.json" handleAs="json" on-core-response="{{handleResponse}}"></core-ajax>
     </template>
     <script>
     var oil_types = [
@@ -22,7 +25,11 @@ Proprietary and confidential
         [2, 1.2, 4.5, 1.2, 24.9, 270.5, 811],
     ];
     Polymer({
+        created: function() {
+            this.data = [];
+        },
         attached: function() {
+            /*
             //TODO(xiang): fetch current tank data from server.
             this.data = [];
             for (var idx = 0; idx < mock_data.length; idx++) {
@@ -46,6 +53,33 @@ Proprietary and confidential
                 tank_info.oil_weight = Math.floor(mock_data[idx][5] * mock_data[idx][6]);
                 this.data.push(tank_info);
             }
+            */
+        },
+        handleResponse: function(e) {
+            this.data = [];
+            var response = e.detail.response;
+            for (var idx = 0; idx < response.length; idx++) {
+                var r = response[idx];
+                var tank_info = {};
+                tank_info.tank_id = r.id;
+                tank_info.oil_waning_low_level = 1;
+                tank_info.oil_waning_high_level = 8;
+                tank_info.water_warning_level = 2;
+                tank_info.temperature_low_warning = -10;
+                tank_info.temperature_high_warning = 50;
+                tank_info.tank_height = 10;
+                tank_info.tank_radius = 10;
+                tank_info.oil_type = r.type;
+                tank_info.oil_level_low = r.oil_low;
+                tank_info.oil_level_high = r.oil_high;
+                tank_info.water_level = r.water;
+                tank_info.temperature = r.temperature;
+                tank_info.oil_volume = r.volume;
+                tank_info.oil_density = r.density;
+                tank_info.oil_weight = Math.floor(r.volume * r.density);
+                this.data.push(tank_info);
+            }
+            console.log(this.data);
         }
     });
     </script>

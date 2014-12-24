@@ -1,0 +1,56 @@
+[{
+    "id": 1,
+    "height": 10,
+    "radius": 10,
+    "type": "90号汽油",
+    "oil_low": 2.3,
+    "oil_high": 8.5,
+    "water": 2.3,
+    "temperature": 39.9,
+    "volume": 423.5,
+    "density": 810
+}, {
+    "id": 2,
+    "height": 10,
+    "radius": 10,
+    "type": "93号汽油",
+    "oil_low": 0.4,
+    "oil_high": 3.7,
+    "water": 0.4,
+    "temperature": 22.8,
+    "volume": 178.6,
+    "density": 812
+}, {
+    "id": 3,
+    "height": 10,
+    "radius": 10,
+    "type": "90号汽油",
+    "oil_low": 0.7,
+    "oil_high": 1.8,
+    "water": 0.7,
+    "temperature": 19.2,
+    "volume": 69.5,
+    "density": 822
+}, {
+    "id": 4,
+    "height": 10,
+    "radius": 10,
+    "type": "航天汽油",
+    "oil_low": 1.5,
+    "oil_high": 6.9,
+    "water": 1.5,
+    "temperature": 43.3,
+    "volume": 330.5,
+    "density": 812
+}, {
+    "id": 5,
+    "height": 10,
+    "radius": 10,
+    "type": "10号柴油",
+    "oil_low": 1.2,
+    "oil_high": 4.5,
+    "water": 1.2,
+    "temperature": 24.9,
+    "volume": 270.5,
+    "density": 811
+}]
